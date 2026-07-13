@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build"
+  command = "mkdir -p public && cp src/logo-icon.png public/logo-icon.png && npm install && npm run build"
   publish = "dist"
 
 [build.environment]
