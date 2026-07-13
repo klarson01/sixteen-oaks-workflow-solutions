@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowRight, Workflow, Brain, Globe, ChevronDown, MapPin, Phone, Mail } from "lucide-react";
-import iconUrl from "../imports/ChatGPT_Image_Jul_13__2026__10_55_09_AM.png";
 
+// --- Scroll reveal hook ---
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -46,6 +46,7 @@ function RevealBlock({
   );
 }
 
+// --- Nav ---
 function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -72,12 +73,20 @@ function Nav() {
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex items-center gap-2.5">
-          <img
-            src={iconUrl}
-            alt=""
-            aria-hidden="true"
-            style={{ height: "64px", width: "auto", filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}
-          />
+          <svg aria-hidden="true" width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="24" y="34" width="4" height="12" rx="2" fill="#D1793B" opacity="0.9"/>
+            <ellipse cx="26" cy="26" rx="14" ry="16" fill="#0a2e3c"/>
+            <ellipse cx="26" cy="26" rx="14" ry="16" fill="none" stroke="#D1793B" strokeWidth="1.5" opacity="0.6"/>
+            <line x1="26" y1="14" x2="26" y2="38" stroke="#D1793B" strokeWidth="1" opacity="0.4"/>
+            <line x1="14" y1="26" x2="38" y2="26" stroke="#D1793B" strokeWidth="1" opacity="0.4"/>
+            <line x1="18" y1="18" x2="34" y2="34" stroke="#D1793B" strokeWidth="0.8" opacity="0.25"/>
+            <line x1="34" y1="18" x2="18" y2="34" stroke="#D1793B" strokeWidth="0.8" opacity="0.25"/>
+            <circle cx="26" cy="14" r="2" fill="#D1793B" opacity="0.9"/>
+            <circle cx="38" cy="26" r="2" fill="#D1793B" opacity="0.9"/>
+            <circle cx="26" cy="38" r="2" fill="#D1793B" opacity="0.9"/>
+            <circle cx="14" cy="26" r="2" fill="#D1793B" opacity="0.9"/>
+            <circle cx="26" cy="26" r="3" fill="#D1793B" opacity="0.85"/>
+          </svg>
           <div className="flex flex-col leading-none text-left">
             <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: "'Playfair Display', serif", color: "#f0ebe0" }}>
               Sixteen Oaks
@@ -138,6 +147,7 @@ function Nav() {
   );
 }
 
+// --- Hero ---
 function Hero() {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { const t = setTimeout(() => setLoaded(true), 120); return () => clearTimeout(t); }, []);
@@ -215,6 +225,7 @@ function Hero() {
   );
 }
 
+// --- Services ---
 const services = [
   { icon: <Brain size={28} />, title: "AI Workflow Design", body: "We map your current processes and identify where AI can eliminate repetitive tasks — from appointment scheduling to invoice follow-ups. You get a custom blueprint, not a generic template." },
   { icon: <Workflow size={28} />, title: "Automation Build-Out", body: "We connect your existing tools — email, calendar, CRM, POS — into smart workflows that run without you watching. Zapier, Make.com, or custom integrations, built to your business logic." },
@@ -247,6 +258,7 @@ function Services() {
   );
 }
 
+// --- How It Works ---
 const steps = [
   { num: "01", title: "Free Discovery Call", body: "We spend 30 minutes learning your business — what's working, what's eating your time, and where the biggest wins are hiding." },
   { num: "02", title: "Custom Workflow Audit", body: "We document your current processes and build a prioritized roadmap of AI automations specific to your industry and team size." },
@@ -282,6 +294,7 @@ function HowItWorks() {
   );
 }
 
+// --- Testimonials ---
 const testimonials = [
   { quote: "Before Sixteen Oaks, I was spending Sunday nights writing follow-up emails. Now it's all automatic. I actually had a full weekend for the first time in years.", name: "Karen Brandt", biz: "Owner, Brandt's Green House & Gifts — Monroe, WI" },
   { quote: "They built us a booking system and automated our reminder texts. No-shows dropped by half in the first month. It paid for itself immediately.", name: "Derek Olson", biz: "Olson's Family Barbershop — Monroe, WI" },
@@ -318,6 +331,7 @@ function Testimonials() {
   );
 }
 
+// --- About ---
 function About() {
   return (
     <section id="about" className="py-28 overflow-hidden" style={{ background: "#071f2b" }}>
@@ -350,6 +364,7 @@ function About() {
   );
 }
 
+// --- CTA Band ---
 function CtaBand() {
   return (
     <section className="py-24 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0d3340 0%, #071f2b 50%, #061e24 100%)" }}>
@@ -375,6 +390,7 @@ function CtaBand() {
   );
 }
 
+// --- Contact ---
 function Contact() {
   const [form, setForm] = useState({ name: "", business: "", email: "", phone: "", message: "" });
   const [sent, setSent] = useState(false);
@@ -391,7 +407,7 @@ function Contact() {
           </RevealBlock>
           <RevealBlock delay={0.1} className="mb-6">
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem, 3vw, 2.8rem)", fontWeight: 500, color: "#f0ebe0", lineHeight: 1.2 }}>
-              Let's talk about<br /><em style={{ color: "#D1793B" }}>your business.</em>
+              Let us talk about<br /><em style={{ color: "#D1793B" }}>your business.</em>
             </h2>
           </RevealBlock>
           <RevealBlock delay={0.2} className="space-y-5">
@@ -417,7 +433,7 @@ function Contact() {
                 <ArrowRight size={24} style={{ color: "#D1793B" }} />
               </div>
               <h3 className="text-xl mb-2" style={{ fontFamily: "'Playfair Display', serif", color: "#f0ebe0" }}>Message Received</h3>
-              <p className="text-sm" style={{ fontFamily: "'DM Sans', sans-serif", color: "#6a9aaa" }}>We'll be in touch within one business day to schedule your free discovery call.</p>
+              <p className="text-sm" style={{ fontFamily: "'DM Sans', sans-serif", color: "#6a9aaa" }}>We will be in touch within one business day to schedule your free discovery call.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="rounded-sm border p-8 lg:p-10" style={{ background: "#0a2e3c", borderColor: "rgba(180,210,220,0.08)" }}>
@@ -457,6 +473,7 @@ function Contact() {
   );
 }
 
+// --- Footer ---
 function Footer() {
   return (
     <footer className="py-12 border-t" style={{ background: "#040f14", borderColor: "rgba(180,210,220,0.06)" }}>
@@ -471,6 +488,7 @@ function Footer() {
   );
 }
 
+// --- App ---
 export default function App() {
   return (
     <div style={{ background: "#061e24" }}>
