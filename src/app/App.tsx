@@ -74,8 +74,12 @@ function Nav() {
       }}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-          <img src={logoUrl} alt="Sixteen Oaks Workflow Solutions" style={{ height: "48px", width: "auto", objectFit: "contain" }} />
+        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex items-center gap-3">
+          <img src={logoUrl} alt="" style={{ height: "44px", width: "auto", objectFit: "contain" }} />
+          <div className="flex flex-col leading-none text-left">
+            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.15rem", fontWeight: 500, color: "#f0ebe0", letterSpacing: "-0.01em" }}>Sixteen Oaks</span>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem", color: "#D1793B", letterSpacing: "0.2em", textTransform: "uppercase", marginTop: "2px" }}>Workflow Solutions</span>
+          </div>
         </button>
 
         <div className="hidden md:flex items-center gap-8">
