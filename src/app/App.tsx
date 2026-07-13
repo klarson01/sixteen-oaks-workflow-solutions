@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowRight, Workflow, Brain, Globe, ChevronDown, MapPin, Phone, Mail } from "lucide-react";
+import logoUrl from "../logo-icon.png";
 
 // --- Scroll reveal hook ---
 function useReveal(threshold = 0.15) {
@@ -72,21 +73,12 @@ function Nav() {
       }}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex items-center gap-2.5">
-          <svg aria-hidden="true" width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="24" y="34" width="4" height="12" rx="2" fill="#D1793B" opacity="0.9"/>
-            <ellipse cx="26" cy="26" rx="14" ry="16" fill="#0a2e3c"/>
-            <ellipse cx="26" cy="26" rx="14" ry="16" fill="none" stroke="#D1793B" strokeWidth="1.5" opacity="0.6"/>
-            <line x1="26" y1="14" x2="26" y2="38" stroke="#D1793B" strokeWidth="1" opacity="0.4"/>
-            <line x1="14" y1="26" x2="38" y2="26" stroke="#D1793B" strokeWidth="1" opacity="0.4"/>
-            <line x1="18" y1="18" x2="34" y2="34" stroke="#D1793B" strokeWidth="0.8" opacity="0.25"/>
-            <line x1="34" y1="18" x2="18" y2="34" stroke="#D1793B" strokeWidth="0.8" opacity="0.25"/>
-            <circle cx="26" cy="14" r="2" fill="#D1793B" opacity="0.9"/>
-            <circle cx="38" cy="26" r="2" fill="#D1793B" opacity="0.9"/>
-            <circle cx="26" cy="38" r="2" fill="#D1793B" opacity="0.9"/>
-            <circle cx="14" cy="26" r="2" fill="#D1793B" opacity="0.9"/>
-            <circle cx="26" cy="26" r="3" fill="#D1793B" opacity="0.85"/>
-          </svg>
+        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex items-center gap-3">
+          <img
+            src={logoUrl}
+            alt="Sixteen Oaks Workflow Solutions"
+            style={{ height: "52px", width: "auto", objectFit: "contain" }}
+          />
           <div className="flex flex-col leading-none text-left">
             <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: "'Playfair Display', serif", color: "#f0ebe0" }}>
               Sixteen Oaks
