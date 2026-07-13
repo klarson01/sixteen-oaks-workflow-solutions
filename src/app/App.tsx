@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowRight, Workflow, Brain, Globe, ChevronDown, MapPin, Phone, Mail } from "lucide-react";
+import iconUrl from "../imports/ChatGPT_Image_Jul_13__2026__10_55_09_AM.png";
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -70,13 +71,21 @@ function Nav() {
       }}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex flex-col leading-none text-left">
-          <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: "'Playfair Display', serif", color: "#f0ebe0" }}>
-            Sixteen Oaks
-          </span>
-          <span className="text-xs tracking-[0.18em] uppercase" style={{ color: "#6a9aaa", fontFamily: "'DM Sans', sans-serif" }}>
-            Workflow Solutions
-          </span>
+        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex items-center gap-2.5">
+          <img
+            src={iconUrl}
+            alt=""
+            aria-hidden="true"
+            style={{ height: "64px", width: "auto", filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}
+          />
+          <div className="flex flex-col leading-none text-left">
+            <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: "'Playfair Display', serif", color: "#f0ebe0" }}>
+              Sixteen Oaks
+            </span>
+            <span className="text-xs tracking-[0.18em] uppercase" style={{ color: "#D1793B", fontFamily: "'DM Sans', sans-serif" }}>
+              Workflow Solutions
+            </span>
+          </div>
         </button>
 
         <div className="hidden md:flex items-center gap-8">
@@ -222,9 +231,7 @@ function Services() {
           <span className="text-xs tracking-[0.22em] uppercase" style={{ color: "#D1793B", fontFamily: "'DM Mono', monospace" }}>What We Do</span>
         </RevealBlock>
         <RevealBlock delay={0.1} className="mb-16">
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 500, color: "#f0ebe0", maxWidth: "600px", lineHeight: 1.15 }}>
-            Tools that work as hard as you do.
-          </h2>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 500, color: "#f0ebe0", maxWidth: "600px", lineHeight: 1.15 }}>Tools that work as hard as you do.</h2>
         </RevealBlock>
         <div className="grid md:grid-cols-2 gap-px" style={{ background: "rgba(180,210,220,0.07)" }}>
           {services.map((svc, i) => (
@@ -256,9 +263,7 @@ function HowItWorks() {
           <span className="text-xs tracking-[0.22em] uppercase" style={{ color: "#D1793B", fontFamily: "'DM Mono', monospace" }}>The Process</span>
         </RevealBlock>
         <RevealBlock delay={0.1} className="mb-16">
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 500, color: "#f0ebe0", maxWidth: "540px", lineHeight: 1.15 }}>
-            Simple start. Real results.
-          </h2>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 500, color: "#f0ebe0", maxWidth: "540px", lineHeight: 1.15 }}>Simple start. Real results.</h2>
         </RevealBlock>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, i) => (
