@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "product": "OrbitDesk Personal",
+  "channel": "stable",
+  "version": "0.16.0",
+  "releasedAt": "2026-07-27T20:00:00-05:00",
+  "minimumSupportedVersion": "0.14.0",
+  "required": false,
+  "title": "Update notifications",
+  "summary": "OrbitDesk can now check the official Sixteen Oaks release manifest and notify users when a newer stable version is available.",
+  "highlights": [
+    "Daily automatic update check with a 24-hour interval",
+    "Manual Check for updates action from About",
+    "Remind me later and Skip this version controls",
+    "No silent download or installation"
+  ],
+  "releaseNotesUrl": "https://github.com/klarson01/sixteen-oaks-workflow-solutions/blob/main/public/orbitdesk/releases/0.16.0.md",
+  "downloadUrl": "",
+  "sha256": ""
+}
