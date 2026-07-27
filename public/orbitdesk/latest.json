@@ -2,19 +2,20 @@
   "schemaVersion": 1,
   "product": "OrbitDesk Personal",
   "channel": "stable",
-  "version": "0.16.0",
-  "releasedAt": "2026-07-27T20:00:00-05:00",
+  "version": "0.16.1",
+  "releasedAt": "2026-07-27",
   "minimumSupportedVersion": "0.14.0",
   "required": false,
-  "title": "Update notifications",
-  "summary": "OrbitDesk can now check the official Sixteen Oaks release manifest and notify users when a newer stable version is available.",
+  "title": "Update connection visibility",
+  "summary": "OrbitDesk now shows the public release source, full manifest address, last attempt, last successful connection, and the result of each update check.",
   "highlights": [
-    "Daily automatic update check with a 24-hour interval",
-    "Manual Check for updates action from About",
-    "Remind me later and Skip this version controls",
+    "Visible host and full public manifest address",
+    "Last attempt and last successful connection timestamps",
+    "Connected, connecting, and failed status indicators",
+    "Copy address and Open manifest controls",
     "No silent download or installation"
   ],
-  "releaseNotesUrl": "https://github.com/klarson01/sixteen-oaks-workflow-solutions/blob/main/public/orbitdesk/releases/0.16.0.md",
+  "releaseNotesUrl": "https://github.com/klarson01/sixteen-oaks-workflow-solutions/blob/main/public/orbitdesk/releases/0.16.1.md",
   "downloadUrl": "",
   "sha256": ""
 }
