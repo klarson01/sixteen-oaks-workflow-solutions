@@ -2,20 +2,21 @@
   "schemaVersion": 1,
   "product": "OrbitDesk Personal",
   "channel": "stable",
-  "version": "1.0.0",
-  "releasedAt": "2026-07-27",
+  "version": "1.0.1",
+  "releasedAt": "2026-07-31",
   "minimumSupportedVersion": "0.14.0",
   "required": false,
-  "title": "OrbitDesk Personal 1.0",
-  "summary": "OrbitDesk Personal has completed its planned feature set and hardening for private/internal distribution.",
+  "title": "OrbitDesk Personal 1.0.1",
+  "summary": "Adds the accepted Guided Project Update workflow and reliable Copy Prompt behavior for end-of-session project handoffs.",
   "highlights": [
-    "Complete project continuity and task workflow",
-    "Daily Intelligence with meetings and inbox review",
-    "Onboarding, Help, privacy guidance, backup, restore, and diagnostics",
-    "Visible public update source and connection history",
-    "Private/internal distribution; external signing deferred"
+    "Create a project-specific AI handoff prompt from Project Detail",
+    "Paste and parse accomplished work, current state, next action, tasks, blocker, and decision",
+    "Review and edit every parsed field before saving",
+    "Save Work History and project tasks with duplicate-task prevention",
+    "Reliable desktop Copy Prompt confirmation and truthful fallback",
+    "Personal and Corporate guided-update modules remain isolated"
   ],
-  "releaseNotesUrl": "https://github.com/klarson01/sixteen-oaks-workflow-solutions/blob/main/public/orbitdesk/releases/1.0.0.md",
+  "releaseNotesUrl": "https://github.com/klarson01/sixteen-oaks-workflow-solutions/blob/main/public/orbitdesk/releases/1.0.1.md",
   "downloadUrl": "",
   "sha256": ""
 }
