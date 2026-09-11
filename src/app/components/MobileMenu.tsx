@@ -19,9 +19,7 @@ export default function MobileMenu({ path }: { path: PagePath }) {
       </div>
       <Navigation path={path} mobile />
       <div className="menu-footer">
-        <a href="mailto:kevin.larson@sixteenoaksllc.com">
-          Start a conversation
-        </a>
+        <a href="/#contact">Start a conversation</a>
         <p>Rooted in Wisconsin. Built around you.</p>
       </div>
     </dialog>

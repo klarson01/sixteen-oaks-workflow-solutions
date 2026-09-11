@@ -1983,3 +1983,119 @@ html[data-motion="off"]::view-transition-group(root) {
 [tabindex="-1"]:focus {
   outline: none;
 }
+
+/* Reusable portfolio and inquiry content. */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px 36px;
+  padding-block: 60px 110px;
+}
+.project-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1.46;
+  object-fit: cover;
+}
+.project-card h2 {
+  font-size: clamp(28px, 3vw, 42px);
+  margin: 18px 0;
+}
+.project-card p {
+  margin: 18px 0;
+}
+.project-card .eyebrow {
+  margin-top: 24px;
+}
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  padding-block: 40px 100px;
+}
+.project-gallery img {
+  width: 100%;
+  height: auto;
+}
+.project-gallery figcaption {
+  font-size: 14px;
+  color: var(--muted);
+  padding-top: 12px;
+}
+.inquiry-form {
+  min-width: 0;
+}
+.inquiry-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+.inquiry-form label span {
+  opacity: 0.65;
+  font-weight: 400;
+}
+.inquiry-form input,
+.inquiry-form select,
+.inquiry-form textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font: inherit;
+  font-size: 16px;
+  background: #ffffff09;
+  border: 1px solid #b7d0c951;
+  border-radius: 2px;
+  color: inherit;
+}
+.inquiry-form select option {
+  color: #17383d;
+  background: #fff;
+}
+.inquiry-form textarea {
+  resize: vertical;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.form-trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.form-status {
+  margin-top: 18px;
+  font-size: 15px;
+}
+.form-privacy {
+  font-size: 12px;
+  opacity: 0.65;
+  margin-top: 16px;
+}
+.inquiry-form button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+.contact-details a {
+  overflow-wrap: anywhere;
+}
+.contact-grid {
+  align-items: start;
+}
+@media (max-width: 700px) {
+  .project-grid,
+  .project-gallery {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

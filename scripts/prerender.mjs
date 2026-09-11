@@ -1,10 +1,12 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { render, routePaths } from "../.build/server/entry-server.js";
+import { render, getRenderPaths } from "../.build/server/entry-server.js";
 import { renderDocument } from "./render-document.mjs";
 
 const template = await readFile("dist/index.html", "utf8");
-for (const route of [...routePaths, "/404/"]) {
+await mkdir(".build", {recursive:true});
+await writeFile(".build/template.html", template);
+for (const route of [...getRenderPaths(), "/404/"]) {
   const destination =
     route === "/404/"
       ? "dist/404.html"

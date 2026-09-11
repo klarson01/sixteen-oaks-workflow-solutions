@@ -1,3 +1,4 @@
+import FeaturedProject from "../components/FeaturedProject";
 import type { CSSProperties } from "react";
 import Contact from "../components/Contact";
 
@@ -201,46 +202,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section
-        className="section featured-work"
-        aria-labelledby="featured-work-title"
-      >
-        <div className="container featured-work-grid">
-          <a
-            className="work-preview"
-            href="/work/#rays-mobile-repair"
-            data-reveal=""
-            aria-label="Explore the Ray’s Mobile Repair project"
-          >
-            <img
-              src="/assets/rays-mobile-repair-website.jpg"
-              width="1348"
-              height="926"
-              alt="Ray’s Mobile Repair website, with its green and gold branding, service truck, and clear Call Now and Request Service buttons."
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
-          <div className="featured-work-copy" data-reveal="">
-            <p className="eyebrow">Our work</p>
-            <h2 id="featured-work-title">Ray’s Mobile Repair.</h2>
-            <p className="project-category">
-              Custom website · Monroe, Wisconsin
-            </p>
-            <p>
-              A website built around a local business and the customers who
-              count on it. Clear services, direct contact, and a place for the
-              business to grow.
-            </p>
-            <a className="text-link" href="/work/#rays-mobile-repair">
-              Explore the project
-              <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 12h15m-6-6 6 6-6 6"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </section>
+      <FeaturedProject />
       <section className="section" aria-labelledby="principle-title">
         <div className="container principle-grid">
           <div className="principle-copy" data-reveal="">

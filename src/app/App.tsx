@@ -5,7 +5,9 @@ import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Work from "./pages/Work";
 import Approach from "./pages/Approach";
-import type { PagePath } from "./routes";
+import ProjectPage from "./pages/ProjectPage";
+import type { Project } from "../content/model";
+import type { RoutePath, PagePath } from "./routes";
 
 const pages = {
   "/": Home,
@@ -17,8 +19,14 @@ const noScriptStyles =
   ".menu-toggle{display:none}.desktop-nav{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.8125rem}.header-inner{height:auto;min-height:92px;flex-wrap:wrap;padding:18px 0;gap:10px}.desktop-nav{margin-left:0}.motion-toggle{display:none}";
 
 /** React owns the build-time templates; the browser enhances the complete HTML. */
-export default function App({ path }: { path: PagePath }) {
-  const Page = path === "/404/" ? null : pages[path];
+export default function App({
+  path,
+  project,
+}: {
+  path: PagePath;
+  project?: Project;
+}) {
+  const Page = path in pages ? pages[path as RoutePath] : null;
   return (
     <>
       <a className="skip-link" href="#main">
@@ -33,7 +41,9 @@ export default function App({ path }: { path: PagePath }) {
         id="page-announcement"
       />
       <main id="main" tabIndex={-1}>
-        {Page ? (
+        {project ? (
+          <ProjectPage project={project} />
+        ) : Page ? (
           <Page />
         ) : (
           <section className="page-intro" id="top">
