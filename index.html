@@ -1,13 +1,56 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sixteen Oaks Workflow Solutions</title>
-    <meta name="description" content="Practical AI workflows, websites, and automation for small businesses in Monroe, WI." />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#061e24" />
+    <title>
+      Sixteen Oaks Workflow Solutions | Good business. Less busywork.
+    </title>
+    <meta
+      name="description"
+      content="Practical AI, custom websites, and connected workflows for small businesses. Based in Monroe, Wisconsin, and built around you."
+    />
+    <meta
+      property="og:title"
+      content="Sixteen Oaks Workflow Solutions | Good business. Less busywork."
+    />
+    <meta
+      property="og:description"
+      content="Practical AI, custom websites, and connected workflows for small businesses. Based in Monroe, Wisconsin, and built around you."
+    />
+    <meta property="og:type" content="website" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23061e24'/%3E%3Crect x='7' y='7' width='50' height='50' rx='2' fill='none' stroke='%23d1793b'/%3E%3Ctext x='32' y='43' text-anchor='middle' fill='%23e0a174' font-family='Georgia,serif' font-size='34'%3E16%3C/text%3E%3C/svg%3E"
+    />
+    <link
+      rel="preload"
+      href="/assets/oaks-serif.woff"
+      as="font"
+      type="font/woff"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/assets/oaks-sans.woff"
+      as="font"
+      type="font/woff"
+      crossorigin
+    />
+    <script>
+      try {
+        document.documentElement.dataset.motion =
+          matchMedia("(prefers-reduced-motion: reduce)").matches ||
+          localStorage.getItem("sixteen-oaks-motion") === "reduce"
+            ? "off"
+            : "on";
+      } catch (e) {}
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div id="root"><!--app-html--></div>
   </body>
 </html>
