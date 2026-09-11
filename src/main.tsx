@@ -1,10 +1,6 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./styles/index.css";
-import App from "./app/App";
+import "./styles/site.css";
+import initializeMotion from "./app/lib/motion";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+// Every route is already complete HTML. React is used at build time, so this
+// enhancement never replaces the page and the site remains usable without JS.
+initializeMotion();

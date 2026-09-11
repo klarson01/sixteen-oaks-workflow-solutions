@@ -1,11 +1,12 @@
 [build]
-  command = "mkdir -p public && cp src/logo-icon.png public/logo-icon.png && npm install && npm run build"
+  command = "npm run build"
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "24"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[context.deploy-preview]
+  command = "npm run build"
+
+# Each route has its own HTML file. Netlify serves 404.html for unknown paths.
+# Keep public/orbitdesk/ files at their current URLs; no catch-all SPA rewrite.
