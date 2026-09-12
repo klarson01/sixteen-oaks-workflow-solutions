@@ -419,3 +419,20 @@ footer {
     scroll-behavior: auto !important;
   }
 }
+
+.invite-help {
+  margin-top: 24px;
+  border-top: 1px solid #d4dcd8;
+  padding-top: 18px;
+  font-size: 14px;
+}
+.invite-help summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.invite-help p {
+  font-size: 13px;
+}
+.invite-help input {
+  overflow-wrap: anywhere;
+}

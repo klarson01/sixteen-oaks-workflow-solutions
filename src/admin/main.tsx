@@ -17,6 +17,7 @@ import type {
   MailSettings,
 } from "../content/model";
 import "./style.css";
+import { invitationFragment } from "./invitation";
 async function api(path: string, method = "GET", data?: unknown) {
   const response = await fetch("/api/admin/" + path, {
     method,
@@ -170,6 +171,7 @@ function Admin() {
     [email, setEmail] = useState(""),
     [password, setPassword] = useState(""),
     [invite, setInvite] = useState(""),
+    [invitationLink, setInvitationLink] = useState(""),
     [recovery, setRecovery] = useState(false);
   const [content, setContent] = useState<SiteContent | null>(null),
     [etag, setEtag] = useState(""),
@@ -203,19 +205,26 @@ function Admin() {
       setBusy(false);
     }
   }
+  async function finishCallback() {
+    const callback = await handleAuthCallback();
+    if (callback?.type === "invite") {
+      setSignedIn(false);
+      setInvite(callback.token ?? "");
+      setRecovery(false);
+      return;
+    }
+    if (callback?.type === "recovery") {
+      setSignedIn(false);
+      setRecovery(true);
+      setInvite("");
+      return;
+    }
+    if (await getUser()) await load();
+  }
   useEffect(() => {
     void run(async () => {
       try {
-        const callback = await handleAuthCallback();
-        if (callback?.type === "invite") {
-          setInvite(callback.token ?? "");
-          return;
-        }
-        if (callback?.type === "recovery") {
-          setRecovery(true);
-          return;
-        }
-        if (await getUser()) await load();
+        await finishCallback();
       } finally {
         setLoading(false);
       }
@@ -352,6 +361,45 @@ function Admin() {
                 {invite || recovery ? "Save password" : "Sign in"}
               </button>
             </form>
+            {!invite && !recovery && (
+              <details className="invite-help">
+                <summary>Invitation opened the regular website?</summary>
+                <p>
+                  Open your invitation or password reset here to finish setting
+                  your password.
+                </p>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void run(async () => {
+                      const fragment = invitationFragment(
+                        invitationLink,
+                        location.origin,
+                      );
+                      setInvitationLink("");
+                      history.replaceState(
+                        null,
+                        "",
+                        location.pathname + fragment,
+                      );
+                      await finishCallback();
+                    });
+                  }}
+                >
+                  <label>
+                    Invitation or password reset link
+                    <input
+                      type="password"
+                      autoComplete="off"
+                      value={invitationLink}
+                      onChange={(e) => setInvitationLink(e.target.value)}
+                      required
+                    />
+                  </label>
+                  <button disabled={busy}>Continue password setup</button>
+                </form>
+              </details>
+            )}
             {!invite && !recovery && (
               <button
                 className="link"

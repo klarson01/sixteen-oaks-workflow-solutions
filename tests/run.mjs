@@ -6,6 +6,7 @@ import { resolve } from "node:path";
 await mkdir(".build/tests", { recursive: true });
 await build({
   entryPoints: [
+    "src/admin/invitation.ts",
     "netlify/functions/opportunity.ts",
     "src/content/opportunity.ts",
     "netlify/functions/admin.ts",
@@ -341,4 +342,80 @@ assert.ok(
 );
 console.log(
   "Passed: AI input and origin checks, missing configuration, bounded gateway request, response validation, daily quota, and inquiry handoff.",
+);
+
+const { invitationFragment } =
+  await import("../.build/tests/src/admin/invitation.js");
+assert.equal(
+  invitationFragment(
+    "https://sixteenoaks.netlify.app/#invite_token=fixture-invite",
+    "https://deploy-preview-2--sixteenoaks.netlify.app",
+  ),
+  "#invite_token=fixture-invite",
+);
+assert.equal(
+  invitationFragment(
+    "https://deploy-preview-2--sixteenoaks.netlify.app/#recovery_token=fixture-recovery",
+    "https://deploy-preview-2--sixteenoaks.netlify.app",
+  ),
+  "#recovery_token=fixture-recovery",
+);
+assert.throws(() =>
+  invitationFragment(
+    "https://attacker.example/#invite_token=fixture",
+    "https://deploy-preview-2--sixteenoaks.netlify.app",
+  ),
+);
+assert.throws(() =>
+  invitationFragment(
+    "https://sixteenoaks.netlify.app/",
+    "https://deploy-preview-2--sixteenoaks.netlify.app",
+  ),
+);
+// Reproduce the SDK claims-only fallback. Never infer confirmation from a JWT.
+globalThis.netlifyIdentityContext = {
+  url: "https://example.test/.netlify/identity",
+  token: "context-token",
+  user: { sub: "owner", email: owner.email, app_metadata: { roles: [] } },
+};
+let verificationCalls = 0;
+globalThis.fetch = async (url, options) => {
+  const auth = options.headers.Authorization;
+  if (auth === "Bearer context-token") return new Response("", { status: 401 });
+  verificationCalls++;
+  assert.equal(String(url), "https://example.test/.netlify/identity/user");
+  if (auth !== "Bearer confirmed-user-session")
+    return new Response("", { status: 401 });
+  return Response.json({
+    id: owner.id,
+    email: owner.email,
+    confirmed_at: owner.confirmedAt,
+    app_metadata: { roles: [] },
+  });
+};
+const sessionRequest = (token) =>
+  new Request("https://example.test/api/admin/content", {
+    headers: { Cookie: "nf_jwt=" + token },
+  });
+assert.equal(
+  (await admin(sessionRequest("confirmed-user-session"), context)).status,
+  200,
+);
+assert.equal(verificationCalls, 1);
+assert.equal((await admin(sessionRequest("forged"), context)).status, 401);
+globalThis.fetch = async (url, options) =>
+  options.headers.Authorization === "Bearer context-token"
+    ? new Response("", { status: 401 })
+    : Response.json({
+        id: "other",
+        email: "other@example.com",
+        confirmed_at: owner.confirmedAt,
+      });
+const notAllowed = await admin(sessionRequest("other-session"), context);
+assert.equal(notAllowed.status, 403);
+assert.match(await notAllowed.text(), /email is not on the website admin list/);
+globalThis.fetch = async () => new Response("", { status: 401 });
+assert.equal((await admin(sessionRequest("expired"), context)).status, 401);
+console.log(
+  "Passed: invitation link validation and confirmed no-role login with claims-only SDK fallback; forged, expired, and non-owner sessions stay blocked.",
 );
