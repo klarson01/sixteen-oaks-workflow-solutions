@@ -12,6 +12,7 @@ await build({
     "netlify/functions/admin.ts",
     "netlify/functions/inquiries.ts",
     "netlify/functions/_shared/auth.ts",
+    "netlify/functions/_shared/store.ts",
     "netlify/functions/_shared/secrets.ts",
     "netlify/functions/_shared/form-key.ts",
     "src/content/validation.ts",
@@ -320,8 +321,8 @@ const quotaContext = {
   deploy: { context: "deploy-preview", id: "quota-test" },
 };
 for (let i = 0; i < 100; i++)
-  assert.equal(await reserveRequest(quotaContext), true);
-assert.equal(await reserveRequest(quotaContext), false);
+  assert.equal(await reserveRequest(quotaContext, "2098-01-01"), true);
+assert.equal(await reserveRequest(quotaContext, "2098-01-01"), false);
 assert.equal(await reserveRequest(quotaContext, "2099-01-01"), true);
 const brief = opportunityBrief(
   finderInput.business,
@@ -418,4 +419,25 @@ globalThis.fetch = async () => new Response("", { status: 401 });
 assert.equal((await admin(sessionRequest("expired"), context)).status, 401);
 console.log(
   "Passed: invitation link validation and confirmed no-role login with claims-only SDK fallback; forged, expired, and non-owner sessions stay blocked.",
+);
+
+const { storeFor } =
+  await import("../.build/tests/netlify/functions/_shared/store.js");
+const nextPreview = {
+  ...context,
+  deploy: { context: "deploy-preview", id: "replacement-deploy" },
+};
+assert.deepEqual(
+  await storeFor(nextPreview).get("content", { type: "json" }),
+  await storeFor(context).get("content", { type: "json" }),
+);
+assert.equal(
+  await storeFor({
+    ...context,
+    deploy: { context: "production", id: "replacement-live" },
+  }).get("content", { type: "json" }),
+  null,
+);
+console.log(
+  "Passed: saved preview content persists through deployment updates and stays separate from production.",
 );

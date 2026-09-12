@@ -289,19 +289,19 @@ nav [aria-current="page"] {
   flex-wrap: wrap;
 }
 .save-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  margin: 24px 0;
+  flex-wrap: wrap;
   padding: 16px 24px;
   background: #fff;
-  border-top: 1px solid #b7c7c1;
+  border: 1px solid #b7c7c1;
+  border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 16px;
   z-index: 4;
-  box-shadow: 0 -4px 20px #061e2410;
+  box-shadow: 0 2px 12px #061e2408;
 }
 .save-bar span {
   font-size: 13px;

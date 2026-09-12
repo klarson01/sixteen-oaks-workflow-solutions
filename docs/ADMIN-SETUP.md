@@ -32,7 +32,7 @@ Up to 100 projects are supported. Images must be JPG, PNG, or WebP under 2 MB. R
 
 ## Preview and production
 
-Production uses `sixteen-oaks-live`, which persists across production deployments. Each deploy preview uses `sixteen-oaks-preview-<deploy-id>` and displays a clear preview banner. Preview edits, uploaded images, email connection, and test inquiries do not affect production. A new preview deployment starts fresh. Re-enter reviewed content on production after the code is merged; never copy test inquiries or preview media URLs into the live store.
+Production uses `sixteen-oaks-live`, which persists across production deployments. Deploy previews share a stable review store, `sixteen-oaks-preview-6aa56e2f692ceb00088cc1fc`, and display a clear preview banner. This preserves the workspace where project entry began; the identifier is not a credential. Preview edits, uploaded images, email connection, and test inquiries do not affect production. A new preview deployment preserves saved projects, images, settings, and inquiries. Other branch deployments remain isolated by deploy ID. Re-enter reviewed content on production after the code is merged; never copy test inquiries or preview media URLs into the live store.
 
 The existing Ray's example is the seed content for a workspace that has not been edited. Once saved, admin content is authoritative; changing the seed file does not overwrite saved content.
 
@@ -61,3 +61,5 @@ The endpoint allows three requests per minute per IP, plus 100 model attempts pe
 Descriptions are sent to the AI provider through Netlify; the form tells visitors to omit confidential details. Sixteen Oaks does not save finder prompts/results as a separate history. Only usage counts are stored. Clicking “Explore this with Kevin” adds the idea to the contact message for review; only submitting that contact form saves an inquiry and triggers configured notifications.
 
 Admin access does not require a Netlify role. A verified session and an email on the server allowlist are required. If the Identity SDK only supplies JWT claims without the confirmation date, the server checks the actual user-session cookie against the same site’s Identity `/user` endpoint before authorizing access. Invalid, expired, unconfirmed, or non-allowlisted accounts remain denied.
+
+The admin has Save website changes controls above and below the editor, in the page flow so hosting preview toolbars cannot cover a fixed bottom save bar. Fill required image descriptions before saving published content.

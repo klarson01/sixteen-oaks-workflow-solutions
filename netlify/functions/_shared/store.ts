@@ -6,7 +6,11 @@ export function storeFor(context: Context) {
   const scope =
     context.deploy.context === "production"
       ? "live"
-      : `preview-${context.deploy.id}`;
+      : context.deploy.context === "deploy-preview"
+        ? // Keep the active review workspace: Kevin has started adding real examples.
+          // This is a store identifier, not a credential. Never change without migrating data.
+          "preview-6aa56e2f692ceb00088cc1fc"
+        : `preview-${context.deploy.id}`;
   return getStore({ name: `sixteen-oaks-${scope}`, consistency: "strong" });
 }
 export async function readContent(context: Context) {

@@ -272,6 +272,40 @@ function Admin() {
       setMailDirty(true);
     }
   }
+  const saveControls = (
+    <div className="save-bar">
+      <span>
+        {dirty
+          ? "Unsaved website changes"
+          : mailDirty
+            ? "Unsaved email connection"
+            : "All website changes saved"}
+      </span>
+      <button
+        disabled={busy || !dirty}
+        className="primary"
+        onClick={() => void run(saveContent)}
+      >
+        Save website changes
+      </button>
+      <button
+        disabled={busy}
+        onClick={() => {
+          if (
+            (dirty || mailDirty) &&
+            !confirm("Discard unsaved changes and reload?")
+          )
+            return;
+          void run(async () => {
+            await load();
+            setMessage("Loaded the latest saved settings.");
+          });
+        }}
+      >
+        Reload saved settings
+      </button>
+    </div>
+  );
   return (
     <>
       <header>
@@ -429,7 +463,8 @@ function Admin() {
               {preview && (
                 <aside className="preview">
                   Preview workspace. Content and inquiries here are separate
-                  from your live site and reset with a new preview deployment.
+                  from your live site. Saved preview work stays available across
+                  updates.
                 </aside>
               )}
               <div className="title-row">
@@ -462,6 +497,7 @@ function Admin() {
                   </button>
                 ))}
               </nav>
+              {saveControls}
               <fieldset disabled={busy} className="workspace">
                 {tab === "projects" && (
                   <>
@@ -769,7 +805,7 @@ function Admin() {
                         }
                       />
                       <p className="muted">
-                        Save website changes below to update these details.
+                        Use Save website changes to update these details.
                         Changing these addresses never changes administrator
                         access.
                       </p>
@@ -965,38 +1001,7 @@ function Admin() {
                   </section>
                 )}
               </fieldset>
-              <div className="save-bar">
-                <span>
-                  {dirty
-                    ? "Unsaved website changes"
-                    : mailDirty
-                      ? "Unsaved email connection"
-                      : "All website changes saved"}
-                </span>
-                <button
-                  disabled={busy || !dirty}
-                  className="primary"
-                  onClick={() => void run(saveContent)}
-                >
-                  Save website changes
-                </button>
-                <button
-                  disabled={busy}
-                  onClick={() => {
-                    if (
-                      (dirty || mailDirty) &&
-                      !confirm("Discard unsaved changes and reload?")
-                    )
-                      return;
-                    void run(async () => {
-                      await load();
-                      setMessage("Loaded the latest saved settings.");
-                    });
-                  }}
-                >
-                  Reload saved settings
-                </button>
-              </div>
+              {saveControls}
             </>
           )
         )}
