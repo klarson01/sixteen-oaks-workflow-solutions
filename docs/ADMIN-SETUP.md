@@ -49,3 +49,13 @@ The existing Ray's example is the seed content for a workspace that has not been
 `npm test` checks access controls, origin checks, draft visibility, persistence and conflicting saves, input validation, credential encryption/redaction, form-token validation, duplicate submissions, and preview isolation using an in-memory storage fixture. `npm run build` checks types, public pages, assets, navigation, and unchanged OrbitDesk files. These tests do not prove the real Identity account or SMTP provider works: verify login and send a delivery test after activation.
 
 `npm run dev` previews public templates and the admin shell. Use a Netlify deployment for Identity, Blobs, and end-to-end form testing. `npm run preview` serves static build output; its forms do not have runtime signing tokens.
+
+## AI Opportunity Finder
+
+The homepage includes the AI Opportunity Finder at `/#ai-opportunity`. Visitors choose a business type and describe a recurring task. A Netlify Function uses `gpt-4.1-mini` through Netlify AI Gateway to generate a short suggestion and three steps. The fixed example is explicitly labeled and makes no model request.
+
+On eligible Netlify credit-based plans, the gateway supplies `OPENAI_BASE_URL` and `OPENAI_API_KEY` automatically. See [Netlify AI Gateway](https://docs.netlify.com/build/ai-gateway/overview/). If gateway credentials are unavailable, the UI reports that personalized suggestions are unavailable and offers the example/contact route. It never substitutes the example as a generated response. Do not put provider credentials in browser code or Vite variables.
+
+The endpoint allows three requests per minute per IP, plus 100 model attempts per UTC day per workspace. It caps input/output lengths and model response time, validates responses, and fails closed when the usage counter cannot be reserved. Gateway requests consume the site's Netlify AI credits. Set `SIXTEEN_OAKS_AI_ENABLED=false` in Functions-scoped environment variables and redeploy to disable personalized generation. Preview usage is isolated from production.
+
+Descriptions are sent to the AI provider through Netlify; the form tells visitors to omit confidential details. Sixteen Oaks does not save finder prompts/results as a separate history. Only usage counts are stored. Clicking “Explore this with Kevin” adds the idea to the contact message for review; only submitting that contact form saves an inquiry and triggers configured notifications.

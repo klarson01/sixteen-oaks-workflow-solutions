@@ -6,6 +6,8 @@ import { resolve } from "node:path";
 await mkdir(".build/tests", { recursive: true });
 await build({
   entryPoints: [
+    "netlify/functions/opportunity.ts",
+    "src/content/opportunity.ts",
     "netlify/functions/admin.ts",
     "netlify/functions/inquiries.ts",
     "netlify/functions/_shared/auth.ts",
@@ -241,4 +243,102 @@ assert.equal(
 );
 console.log(
   "Passed: admin authorization, CSRF, project visibility, persistence, save conflicts, safe links/images, encryption, signed form tokens, duplicate submission protection, inbox status, email credential redaction, preview isolation.",
+);
+
+// The finder must not invent a live result, spend on rejected requests, or send inquiries itself.
+const { default: finder, reserveRequest } =
+  await import("../.build/tests/netlify/functions/opportunity.js");
+const { exampleOpportunity, opportunityBrief } =
+  await import("../.build/tests/src/content/opportunity.js");
+const finderToken = formToken(await formKey(context), Date.now() - 2000);
+const finderInput = {
+  business: "Service business",
+  challenge: "Following up on estimates after a busy day.",
+  formToken: finderToken,
+};
+const finderRequest = (body = finderInput, origin = "https://example.test") =>
+  new Request("https://example.test/api/opportunity", {
+    method: "POST",
+    headers: { Origin: origin, "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+assert.equal(
+  (await finder(finderRequest(finderInput, "https://other.test"), context))
+    .status,
+  403,
+);
+assert.equal(
+  (await finder(finderRequest({ ...finderInput, formToken: "fake" }), context))
+    .status,
+  400,
+);
+assert.equal(
+  (await finder(finderRequest({ ...finderInput, business: "bad" }), context))
+    .status,
+  400,
+);
+assert.equal((await finder(finderRequest(), context)).status, 503);
+env.OPENAI_BASE_URL = "https://gateway.example.test/v1";
+env.OPENAI_API_KEY = "fixture-only";
+let calls = 0;
+globalThis.fetch = async (url, options) => {
+  calls++;
+  assert.equal(url, "https://gateway.example.test/v1/chat/completions");
+  const body = JSON.parse(options.body);
+  assert.equal(body.store, false);
+  assert.equal(body.model, "gpt-4.1-mini");
+  assert.equal(
+    JSON.parse(body.messages[1].content).challenge,
+    finderInput.challenge,
+  );
+  return Response.json({
+    choices: [
+      {
+        finish_reason: "stop",
+        message: { content: JSON.stringify(exampleOpportunity) },
+      },
+    ],
+  });
+};
+let found = await finder(finderRequest(), context);
+assert.equal(found.status, 200);
+assert.deepEqual((await found.json()).suggestion, exampleOpportunity);
+assert.equal(calls, 1);
+globalThis.fetch = async () =>
+  Response.json({
+    choices: [
+      {
+        finish_reason: "stop",
+        message: { content: '{"title":"<script>alert(1)</script>"}' },
+      },
+    ],
+  });
+assert.equal((await finder(finderRequest(), context)).status, 503);
+const quotaContext = {
+  ...context,
+  deploy: { context: "deploy-preview", id: "quota-test" },
+};
+for (let i = 0; i < 100; i++)
+  assert.equal(await reserveRequest(quotaContext), true);
+assert.equal(await reserveRequest(quotaContext), false);
+assert.equal(await reserveRequest(quotaContext, "2099-01-01"), true);
+const brief = opportunityBrief(
+  finderInput.business,
+  finderInput.challenge,
+  exampleOpportunity,
+);
+assert.ok(
+  brief.includes(finderInput.challenge) &&
+    brief.includes("AI-generated starting point"),
+);
+assert.ok(
+  opportunityBrief(
+    finderInput.business,
+    finderInput.challenge,
+    exampleOpportunity,
+    true,
+  ).includes("example"),
+);
+console.log(
+  "Passed: AI input and origin checks, missing configuration, bounded gateway request, response validation, daily quota, and inquiry handoff.",
 );

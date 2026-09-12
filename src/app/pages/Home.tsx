@@ -1,3 +1,4 @@
+import OpportunityFinder from "../components/OpportunityFinder";
 import FeaturedProject from "../components/FeaturedProject";
 import type { CSSProperties } from "react";
 import Contact from "../components/Contact";
@@ -44,8 +45,8 @@ export default function Home() {
                     <path d="M4 12h15m-6-6 6 6-6 6"></path>
                   </svg>
                 </a>
-                <a className="text-link" href="/services/">
-                  Explore our services
+                <a className="text-link" href="#ai-opportunity">
+                  Find your AI opportunity
                   <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M4 12h15m-6-6 6 6-6 6"></path>
                   </svg>
@@ -105,6 +106,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <OpportunityFinder />
       <section
         className="light-section section"
         id="services"
