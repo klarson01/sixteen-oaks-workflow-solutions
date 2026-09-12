@@ -251,7 +251,14 @@ function Admin() {
     setEtag(result.etag);
     setSavedIds(result.content.projects.map((p: Project) => p.id));
     setDirty(false);
-    setMessage("Saved. Published changes are now visible on this site.");
+    const savedProject = result.content.projects.find(
+      (p: Project) => p.id === selected,
+    );
+    setMessage(
+      savedProject?.status === "draft"
+        ? `Saved “${savedProject.title}” as a draft. Choose Published and save when it is ready to appear in Our work.`
+        : `Saved. Published projects are visible on the ${preview ? "preview" : "live"} Our work page.`,
+    );
   }
   const project = content?.projects.find((p) => p.id === selected);
   function patchProject(patch: Partial<Project>) {
@@ -598,6 +605,11 @@ function Admin() {
                               }
                             />
                           </div>
+                          <p className="muted">
+                            {project.status === "draft"
+                              ? "Drafts are saved privately. To show this project in Our work, complete the publishing details, choose Published, and save."
+                              : "Save website changes to publish this project on this site’s Our work page."}
+                          </p>
                           {(
                             [
                               "tagline",
@@ -612,11 +624,11 @@ function Admin() {
                               key={key}
                               label={
                                 [
-                                  "Introduction",
-                                  "Short description",
-                                  "Business type",
+                                  "Introduction (required to publish)",
+                                  "Short description (required to publish)",
+                                  "Business type (required to publish)",
                                   "Location (optional)",
-                                  "Project type",
+                                  "Project type (required to publish)",
                                   "Live website URL (optional)",
                                 ][i]
                               }
