@@ -40,7 +40,7 @@ async function walk(directory) {
 }
 
 const titles = new Set();
-for (const route of [...routes, "/404.html"]) {
+for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
   const file = fileFor(route);
   const html = await loadDocument(file);
   assert.equal(

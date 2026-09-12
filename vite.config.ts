@@ -23,7 +23,8 @@ function renderDevelopmentPages(): Plugin {
         if (path.extname(url.pathname) && url.pathname !== "/index.html")
           return next();
         // Existing OrbitDesk update endpoints belong to public/ and are served as files.
-        if (url.pathname.startsWith("/orbitdesk/")) return next();
+        if (/^\/(?:orbitdesk|admin|api)(?:\/|$)/.test(url.pathname))
+          return next();
         try {
           const template = await server.transformIndexHtml(
             url.pathname,
@@ -58,5 +59,15 @@ export default defineConfig(({ isSsrBuild }) => ({
     "**/*.jpeg",
     "**/*.webp",
   ],
-  build: { copyPublicDir: !isSsrBuild },
+  build: {
+    copyPublicDir: !isSsrBuild,
+    rollupOptions: isSsrBuild
+      ? {}
+      : {
+          input: {
+            main: path.join(root, "index.html"),
+            admin: path.join(root, "admin/index.html"),
+          },
+        },
+  },
 }));
