@@ -7,9 +7,13 @@ export default function Brand({ footer = false }: { footer?: boolean }) {
     >
       <span className="brand-art" aria-hidden="true">
         <img
-          src="/assets/sixteen-oaks-logo.png"
-          width="1536"
-          height="1024"
+          src={
+            footer
+              ? "/assets/midnight-brass-stacked.png"
+              : "/assets/midnight-brass-horizontal.png"
+          }
+          width={footer ? 1040 : 1600}
+          height={footer ? 1040 : 667}
           alt=""
           decoding="async"
         />
