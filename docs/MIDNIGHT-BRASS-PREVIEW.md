@@ -10,3 +10,5 @@ This review branch is based on the admin and AI Opportunity Finder branch. It pr
 - Public content, routes, motion, forms, and portfolio behavior are retained. Admin code and saved content are unchanged. Deploy previews currently share the existing preview content store, so use the original preview admin for content editing.
 
 Run `npm run build` before review. Compare this draft with PR #2; merge only after the visual direction is approved.
+
+PR #3 targets `main` to activate the repository's existing CI and Netlify preview workflow. It includes PR #2 and must remain a draft until that work and this visual direction are approved. The public theme can be reviewed independently from the nine-file branding commit.
