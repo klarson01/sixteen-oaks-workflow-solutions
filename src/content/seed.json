@@ -1,0 +1,45 @@
+{
+  "settings": {
+    "publicEmail": "kevin.larson@sixteenoaksllc.com",
+    "phone": "608.558.5639",
+    "notificationEmail": "kevin.larson@sixteenoaksllc.com",
+    "featuredProjectId": "rays-mobile-repair"
+  },
+  "projects": [
+    {
+      "id": "rays-mobile-repair",
+      "slug": "rays-mobile-repair",
+      "title": "Ray’s Mobile Repair",
+      "tagline": "A local business. A clear online home.",
+      "summary": "A website built around a local business and the customers who count on it. Clear services, direct contact, and a place for the business to grow.",
+      "business": "Mobile repair & fleet service",
+      "location": "Monroe, Wisconsin",
+      "category": "Custom business website",
+      "website": "https://www.raysmobilerepair.com/",
+      "status": "published",
+      "order": 1,
+      "cover": {
+        "src": "/assets/rays-mobile-repair-website.jpg",
+        "alt": "Ray’s Mobile Repair website, with its green and gold branding, service truck, and clear Call Now and Request Service buttons.",
+        "width": 1348,
+        "height": 926,
+        "caption": "The Ray’s Mobile Repair homepage, with direct paths to call or request service."
+      },
+      "gallery": [],
+      "needTitle": "Make the next step clear.",
+      "need": "Give a local mobile repair business a clear online home. Explain the services, introduce the business, and help customers reach Ray when a truck or piece of equipment needs attention.",
+      "buildTitle": "Build around the business.",
+      "build": "A custom, mobile-friendly website shaped around Ray’s branding, service offering, and story. Dedicated pages cover repair services, fleet support, hiring, and customer contact.",
+      "experienceTitle": "Connect people to help.",
+      "experience": "Visitors can call for urgent repair, send a service request, explore fleet support, or apply for a job. Each path supports a real part of the business’s day.",
+      "delivered": [
+        "Business discovery & content planning",
+        "Custom website design",
+        "Responsive mobile layouts",
+        "Service & fleet pages",
+        "Contact & hiring forms",
+        "Launch & domain setup"
+      ]
+    }
+  ]
+}

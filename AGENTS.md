@@ -15,7 +15,8 @@
 - Use existing page components and shared styles. Keep the four public page routes stable.
 - Preserve confirmed copy and contact details. Do not invent testimonials, client outcomes, metrics, or completed projects.
 - Keep visible copy in plain language for small-business owners.
-- The approved contact experience uses email and phone links. Do not present a success state for a message that has not actually been sent.
+- The contact experience includes an inquiry form plus email and phone links. Show success only after the inquiry is saved. Email delivery is separate and must never be implied when unconfigured or failed.
+- Admin identities are server-authorized independently from editable public contact and notification email addresses. Never expose SMTP credentials in client responses.
 
 ## Development and review
 

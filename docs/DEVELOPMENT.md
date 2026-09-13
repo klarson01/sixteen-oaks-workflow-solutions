@@ -25,14 +25,14 @@ npm run build
 
 The build performs these steps:
 
-1. Type-check the React pages and Vite configuration.
+1. Type-check the public pages, admin, Netlify Functions, and Vite configuration.
 2. Preserve the legacy logo URL.
-3. Build the browser CSS and motion code with Vite.
+3. Build the browser CSS, motion code, and admin entry with Vite.
 4. Build the React page renderer into the ignored .build/ directory.
-5. Generate complete HTML for the four routes and a 404 page.
+5. Save the Vite shell for runtime rendering, then generate complete HTML for the four main routes, published seed projects, and a 404 page.
 6. Validate internal links, anchors, image alternatives, metadata, navigation, stylesheet assets, reduced-motion hooks, and copied OrbitDesk update files.
 
-Only dist/ is published. .build/, node_modules/, and local environment files are not deployment content.
+Static assets are published from dist/. Netlify bundles the functions and includes .build/template.html in the public renderer. Local environment files are never committed or published.
 
 ```sh
 npm run preview
@@ -64,7 +64,7 @@ Reuse the dedicated Sixteen Oaks Netlify project and this repository connection.
 
 netlify.toml declares the build and runtime settings. Repository linking and Deploy Preview access settings are managed in Netlify. A configuration file alone does not confirm the account connection.
 
-Netlify serves the generated route HTML directly. There is no catch-all rewrite to the homepage. Unknown URLs use the generated 404 page.
+Netlify renders public pages through the site function using current Blobs content. Assets, admin HTML, and OrbitDesk update files remain static. There is no catch-all SPA rewrite. Unknown project paths return a rendered 404.
 
 ## Before merging
 
@@ -80,6 +80,10 @@ The initial migration preserves the existing public/orbitdesk/ feed and release 
 
 The previous site used a single large React component and a client-rendered homepage. The refreshed site uses shared React templates and static output. The browser receives lightweight motion code, rather than a React runtime for an otherwise static page.
 
-The previous contact form only changed its local display to a success message. The approved site uses the user's confirmed email and phone links; it makes no claim to send a form.
+The current contact form saves messages to the admin Inbox before reporting success. Optional SMTP notifications are configured in the same admin. See ADMIN-SETUP.md for Identity activation, encrypted credentials, preview isolation, and daily content editing.
 
 Old styles remain unimported for reference. Existing dependencies remain pinned at their original versions; the migration adds TypeScript declaration packages and a lockfile.
+
+## Admin feature checks
+
+Run `npm test` before the build. This checks server authorization, signed submissions, persistence conflicts, draft visibility, and credential redaction using an in-memory storage fixture. Real Identity login and SMTP delivery require the one-time setup and a deployed Netlify site.
