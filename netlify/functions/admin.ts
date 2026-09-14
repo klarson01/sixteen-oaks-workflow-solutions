@@ -8,7 +8,7 @@ import {
 } from "../../src/content/validation";
 import { requireAdmin } from "./_shared/auth";
 import { storeFor, readContent, json } from "./_shared/store";
-import { seal } from "./_shared/secrets";
+import { seal, secretKeyValue } from "./_shared/secrets";
 import { deliver, type StoredMail } from "./_shared/mail";
 
 export default async function (request: Request, context: Context) {
@@ -64,7 +64,7 @@ export default async function (request: Request, context: Context) {
       const data = await store.getWithMetadata("mail", { type: "json" });
       const value = data?.data;
       return json({
-        encryptionReady: !!Netlify.env.get("SIXTEEN_OAKS_SECRET_KEY"),
+        encryptionReady: !!secretKeyValue(),
         host: value?.host ?? "",
         port: value?.port ?? 587,
         username: value?.username ?? "",
@@ -83,7 +83,7 @@ export default async function (request: Request, context: Context) {
           { message: "Email settings changed. Reload before saving." },
           409,
         );
-      if (settings.password && !Netlify.env.get("SIXTEEN_OAKS_SECRET_KEY"))
+      if (settings.password && !secretKeyValue())
         throw new ValidationError(
           "One-time server setup is required before saving email credentials. See docs/ADMIN-SETUP.md.",
         );

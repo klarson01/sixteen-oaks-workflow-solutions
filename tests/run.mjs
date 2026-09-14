@@ -37,7 +37,7 @@ const { formKey } =
   await import("../.build/tests/netlify/functions/_shared/form-key.js");
 const { canAdmin } =
   await import("../.build/tests/netlify/functions/_shared/auth.js");
-const { seal, unseal, formToken, verifyFormToken } =
+const { secretKey, seal, unseal, formToken, verifyFormToken } =
   await import("../.build/tests/netlify/functions/_shared/secrets.js");
 const { validateContent } =
   await import("../.build/tests/src/content/validation.js");
@@ -213,6 +213,20 @@ const mail = {
   password: secret,
   etag: "seed",
 };
+// Reproduce the deployed configuration: only the mixed-case key name exists.
+// Readiness and saving must use the same resolver as encryption/decryption.
+delete env.SIXTEEN_OAKS_SECRET_KEY;
+assert.equal(
+  (await (await admin(request("mail"), context)).json()).encryptionReady,
+  false,
+);
+assert.equal((await admin(request("mail", "PUT", mail), context)).status, 400);
+env.Sixteen_Oaks_Secret_Key = key;
+assert.deepEqual(secretKey(), Buffer.from(key, "base64"));
+assert.equal(
+  (await (await admin(request("mail"), context)).json()).encryptionReady,
+  true,
+);
 response = await admin(request("mail", "PUT", mail), context);
 assert.equal(response.status, 200);
 const mailResult = await response.json();
@@ -222,6 +236,20 @@ assert.equal(mailResult.encryptedPassword, undefined);
 const publicMail = await (await admin(request("mail"), context)).json();
 assert.equal(publicMail.password, undefined);
 assert.equal(publicMail.encryptedPassword, undefined);
+assert.equal(JSON.stringify(publicMail).includes(key), false);
+const aliasEncrypted = seal(secret);
+assert.equal(unseal(aliasEncrypted), secret);
+// Prefer the canonical name without silently overriding an explicit empty key.
+env.SIXTEEN_OAKS_SECRET_KEY = randomBytes(32).toString("base64");
+assert.deepEqual(
+  secretKey(),
+  Buffer.from(env.SIXTEEN_OAKS_SECRET_KEY, "base64"),
+);
+env.SIXTEEN_OAKS_SECRET_KEY = "";
+assert.throws(() => secretKey(), /Server setup is incomplete/);
+env.SIXTEEN_OAKS_SECRET_KEY = key;
+delete env.Sixteen_Oaks_Secret_Key;
+assert.equal(unseal(aliasEncrypted), secret);
 assert.equal(
   (
     await admin(

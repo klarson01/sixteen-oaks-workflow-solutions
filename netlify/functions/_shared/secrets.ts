@@ -6,8 +6,16 @@ import {
   randomUUID,
   timingSafeEqual,
 } from "node:crypto";
+export function secretKeyValue() {
+  // Preserve the key already created in Netlify with mixed capitalization.
+  // The documented uppercase name takes precedence when explicitly configured.
+  return (
+    Netlify.env.get("SIXTEEN_OAKS_SECRET_KEY") ??
+    Netlify.env.get("Sixteen_Oaks_Secret_Key")
+  );
+}
 export function secretKey() {
-  const value = Netlify.env.get("SIXTEEN_OAKS_SECRET_KEY");
+  const value = secretKeyValue();
   if (!value) throw new Error("Server setup is incomplete.");
   const key = Buffer.from(value, "base64");
   if (key.length !== 32) throw new Error("Invalid server key.");
