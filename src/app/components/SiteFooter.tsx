@@ -8,6 +8,12 @@ export default function SiteFooter() {
           <Brand footer />
           <div>© 2026 Sixteen Oaks Workflow Solutions · Monroe, Wisconsin</div>
         </div>
+        <nav className="footer-navigation" aria-label="Footer navigation">
+          <a href="/">Home</a>
+          <a href="/services/">Services</a>
+          <a href="/work/">Our work</a>
+          <a href="/approach/">About</a>
+        </nav>
         <div className="footer-right">
           <button className="motion-toggle" aria-pressed="false" hidden={true}>
             <svg viewBox="0 0 20 20" aria-hidden="true">

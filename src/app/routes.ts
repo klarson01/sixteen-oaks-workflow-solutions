@@ -6,7 +6,7 @@ export const routes = {
       "Practical AI, custom websites, and connected workflows for small businesses. Based in Monroe, Wisconsin, and built around you.",
   },
   "/services/": {
-    label: "What we do",
+    label: "Services",
     title: "Our Services | Sixteen Oaks Workflow Solutions",
     description:
       "Custom websites, practical AI and automation, and business workflows designed around the way you work.",
@@ -18,7 +18,7 @@ export const routes = {
       "Explore websites, automation projects, and custom applications built by Sixteen Oaks Workflow Solutions.",
   },
   "/approach/": {
-    label: "How we work",
+    label: "About",
     title: "Our Approach | Sixteen Oaks Workflow Solutions",
     description:
       "A personal, practical approach to better business tools. Listen first, agree on a useful next step, and build around your everyday work.",
