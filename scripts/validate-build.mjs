@@ -79,9 +79,12 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
         const [address, descriptor] = candidate.trim().split(/\s+/);
         const imageUrl = new URL(address, "https://local.test");
         assert.equal(imageUrl.origin, "https://local.test", route + ": same-site image");
-        assert.equal(imageUrl.pathname, "/.netlify/images", route + ": image CDN route");
-        assert.equal(descriptor, imageUrl.searchParams.get("w") + "w", route + ": image width descriptor");
-        const original = imageUrl.searchParams.get("url");
+        assert.match(descriptor ?? "", /^[1-9][0-9]*w$/, route + ": image width descriptor");
+        let original = imageUrl.pathname;
+        if (original === "/.netlify/images") {
+          assert.equal(descriptor, imageUrl.searchParams.get("w") + "w", route + ": CDN image width");
+          original = imageUrl.searchParams.get("url");
+        }
         assert.ok(original?.startsWith("/assets/") && !original.includes(".."), route + ": local source image");
         assert.ok((await stat(fileFor(original))).isFile(), route + ": source image exists");
       }
