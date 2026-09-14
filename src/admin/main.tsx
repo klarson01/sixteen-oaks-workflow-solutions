@@ -1,3 +1,4 @@
+import { homepageFor, homepageFieldGroups, type HomepageContent } from "../content/homepage";
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -117,7 +118,9 @@ function ImageEditor({
   value,
   onChange,
   run,
+  showCaption = true,
 }: {
+  showCaption?: boolean;
   value: ProjectImage;
   onChange: (v: ProjectImage) => void;
   run: (fn: () => Promise<void>) => void;
@@ -155,11 +158,12 @@ function ImageEditor({
         value={value.alt}
         onChange={(alt) => onChange({ ...value, alt })}
       />
-      <Field
+      {showCaption && <Field
         label="Caption (optional)"
+        multiline
         value={value.caption}
         onChange={(caption) => onChange({ ...value, caption })}
-      />
+      />}
     </div>
   );
 }
@@ -180,12 +184,12 @@ function Admin() {
     [mailDirty, setMailDirty] = useState(false),
     [mail, setMail] = useState<MailForm | null>(null),
     [inbox, setInbox] = useState<Inquiry[]>([]),
-    [tab, setTab] = useState("projects"),
+    [tab, setTab] = useState("homepage"),
     [selected, setSelected] = useState(""),
     [savedIds, setSavedIds] = useState<string[]>([]);
   async function load() {
     const data = await api("content");
-    setContent(data.content);
+    setContent({ ...data.content, homepage: structuredClone(homepageFor(data.content)) });
     setEtag(data.etag);
     setPreview(data.preview);
     setSavedIds(data.content.projects.map((p: Project) => p.id));
@@ -255,7 +259,9 @@ function Admin() {
       (p: Project) => p.id === selected,
     );
     setMessage(
-      savedProject?.status === "draft"
+      tab === "homepage"
+        ? `Homepage saved. Open View website to see your changes on this ${preview ? "preview" : "live"} site.`
+        : savedProject?.status === "draft"
         ? `Saved “${savedProject.title}” as a draft. Choose Published and save when it is ready to appear in Our work.`
         : `Saved. Published projects are visible on the ${preview ? "preview" : "live"} Our work page.`,
     );
@@ -272,6 +278,10 @@ function Admin() {
       settings,
       projects: content.projects.map((p) => (p.id === next.id ? next : p)),
     });
+  }
+  const homepage = content ? homepageFor(content) : null;
+  function patchHomepage(patch: Partial<HomepageContent>) {
+    if (content && homepage) edit({ ...content, homepage: { ...homepage, ...patch } });
   }
   function mailPatch(patch: Partial<MailForm>) {
     if (mail) {
@@ -359,7 +369,7 @@ function Admin() {
                   ? "Reset your password"
                   : "Welcome back."}
             </h1>
-            <p>Manage projects, contact details, and inquiries in one place.</p>
+            <p>Manage your homepage, projects, contact details, and inquiries in one place.</p>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -485,6 +495,7 @@ function Admin() {
               </div>
               <nav aria-label="Admin sections">
                 {[
+                  ["homepage", "Homepage"],
                   ["projects", "Our work"],
                   ["contact", "Contact & email"],
                   ["inbox", "Inbox"],
@@ -506,6 +517,43 @@ function Admin() {
               </nav>
               {saveControls}
               <fieldset disabled={busy} className="workspace">
+                {tab === "homepage" && homepage && (
+                  <div className="homepage-editor">
+                    <section className="panel homepage-overview">
+                      <p className="eyebrow">Your selected design</p>
+                      <h2>Main Street · teal &amp; copper</h2>
+                      <p>Edit the words and photos below. The layout, colors, and button destinations stay consistent. Save website changes, then open View website to review.</p>
+                      <p className="muted">Line breaks in headings and captions are preserved. The featured project is selected in Our work; public email and phone are managed in Contact &amp; email.</p>
+                    </section>
+                    {homepageFieldGroups.map((group, index) => (
+                      <section className="panel" key={group.title}>
+                        <h2>{group.title}</h2>
+                        <div className="two">
+                          <div>{group.fields.map(([key, label, limit]) => (
+                            <Field key={key} label={`${label} (up to ${limit} characters)`} value={homepage[key]}
+                              multiline={!["primaryLabel", "secondaryLabel", "communityButton", "closingButton"].includes(key)}
+                              onChange={(value) => patchHomepage({ [key]: value })} />
+                          ))}</div>
+                          <div>
+                            <h3>{["Oak photo", "Main Street photo", "Countryside photo"][index]}</h3>
+                            <ImageEditor showCaption={index === 1} value={homepage[(["heroImage", "communityImage", "closingImage"] as const)[index]]}
+                              onChange={(value) => patchHomepage({ [(["heroImage", "communityImage", "closingImage"] as const)[index]]: value })} run={run} />
+                            <p className="muted">{index === 1 ? "The caption appears over the Main Street photo." : "This photo does not display a caption."}</p>
+                          </div>
+                        </div>
+                      </section>
+                    ))}
+                    <section className="panel">
+                      <h2>Four service summaries</h2>
+                      <div className="two">{homepage.services.map((service, index) => (
+                        <div key={index}>
+                          <Field label={`Service ${index + 1} title`} value={service.title} onChange={(title) => patchHomepage({ services: homepage.services.map((s, i) => i === index ? { ...s, title } : s) })} />
+                          <Field label="Short description" value={service.description} multiline onChange={(description) => patchHomepage({ services: homepage.services.map((s, i) => i === index ? { ...s, description } : s) })} />
+                        </div>
+                      ))}</div>
+                    </section>
+                  </div>
+                )}
                 {tab === "projects" && (
                   <>
                     <div className="toolbar">

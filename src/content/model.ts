@@ -1,3 +1,4 @@
+import type { HomepageContent } from "./homepage";
 export interface ProjectImage {
   src: string;
   alt: string;
@@ -34,6 +35,7 @@ export interface SiteSettings {
   featuredProjectId: string;
 }
 export interface SiteContent {
+  homepage?: HomepageContent;
   settings: SiteSettings;
   projects: Project[];
 }

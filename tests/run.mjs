@@ -7,6 +7,7 @@ await mkdir(".build/tests", { recursive: true });
 await build({
   entryPoints: [
     "src/admin/invitation.ts",
+    "src/content/homepage.ts",
     "netlify/functions/opportunity.ts",
     "src/content/opportunity.ts",
     "netlify/functions/admin.ts",
@@ -441,3 +442,58 @@ assert.equal(
 console.log(
   "Passed: saved preview content persists through deployment updates and stays separate from production.",
 );
+
+// Homepage edits survive save/read/render without resetting existing customer content.
+const { defaultHomepage } = await import("../.build/tests/src/content/homepage.js");
+const homeContext = { ...context, deploy: { context: "branch-deploy", id: "homepage-test" } };
+globalThis.netlifyIdentityContext = { url: "https://example.test/.netlify/identity", token: "test-session" };
+globalThis.fetch = async () => Response.json({ id: owner.id, email: owner.email, confirmed_at: owner.confirmedAt, app_metadata: {}, user_metadata: {} });
+const legacyRead = await (await admin(request("content"), homeContext)).json();
+assert.ok(render("/", legacyRead.content).html.includes("main-street-preview.webp"));
+assert.equal(await storeFor(homeContext).get("content", { type: "json" }), null, "Reading old content does not write migration data");
+const homeContent = structuredClone(legacyRead.content);
+homeContent.homepage = structuredClone(defaultHomepage);
+homeContent.homepage.headline = "Your day, simplified.";
+homeContent.homepage.communityDescription = "Custom Main Street description from the admin.";
+homeContent.homepage.communityImage.caption = "Local businesses.\nLasting relationships.";
+homeContent.homepage.services[0].description = "Website services edited by Kevin.";
+homeContent.homepage.closingNote = "Let’s start with your business.";
+homeContent.homepage.heroImage.src = "/api/media/11111111-1111-4111-8111-111111111111";
+homeContent.settings.featuredProjectId = homeContent.projects[0].id;
+const homeSave = await admin(request("content", "PUT", { content: homeContent, etag: legacyRead.etag }), homeContext);
+assert.equal(homeSave.status, 200);
+const homeSaved = await homeSave.json();
+const homeReloaded = await (await admin(request("content"), homeContext)).json();
+assert.deepEqual(homeReloaded.content.homepage, homeContent.homepage);
+assert.deepEqual(homeReloaded.content.projects, legacyRead.content.projects);
+assert.equal(homeReloaded.content.settings.publicEmail, legacyRead.content.settings.publicEmail);
+const homeHtml = render("/", homeReloaded.content).html;
+for (const copy of ["Your day, simplified.", "Custom Main Street description from the admin.", "Website services edited by Kevin.", "Local businesses."])
+  assert.ok(homeHtml.includes(copy), `Saved copy reaches public HTML: ${copy}`);
+assert.ok(homeHtml.includes('src="/api/media/11111111-1111-4111-8111-111111111111"'));
+assert.ok(!homeHtml.includes("oak-landscape-768.webp"), "Uploaded hero must not use default photo srcset");
+assert.ok(homeHtml.includes('id="featured-work-title"'), "Selected published project is connected to homepage");
+const noFeature = structuredClone(homeReloaded.content);
+noFeature.settings.featuredProjectId = "";
+assert.ok(!render("/", noFeature).html.includes('id="featured-work-title"'));
+const oldClient = structuredClone(homeReloaded.content);
+delete oldClient.homepage;
+oldClient.settings.phone = "608.555.1234";
+const oldSave = await admin(request("content", "PUT", {content: oldClient, etag: homeSaved.etag}), homeContext);
+assert.equal(oldSave.status, 200);
+assert.deepEqual((await oldSave.json()).content.homepage, homeContent.homepage, "Legacy clients using this API preserve homepage fields");
+assert.equal((await admin(request("content", "PUT", {content: homeContent, etag: homeSaved.etag}), homeContext)).status, 409);
+for (const mutate of [
+  h => { h.communityImage.src = "https://attacker.example/image.webp"; },
+  h => { h.closingImage.src = '/assets/../../secret.webp'; },
+  h => { h.heroImage.alt = ''; },
+  h => { h.services.pop(); },
+  h => { h.headline = 'x'.repeat(61); },
+]) {
+  const invalid = structuredClone(homeContent); mutate(invalid.homepage);
+  assert.throws(() => validateContent(invalid));
+}
+const escaped = structuredClone(homeContent);
+escaped.homepage.headline = '<script>alert(1)</script>';
+assert.ok(!render("/", validateContent(escaped)).html.includes('<script>alert(1)</script>'));
+console.log("Passed: homepage defaults, admin save/read/render, existing content preservation, legacy clients, conflicts, safe images, HTML escaping, and featured-project controls.");

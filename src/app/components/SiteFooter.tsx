@@ -13,6 +13,7 @@ export default function SiteFooter() {
           <a href="/services/">Services</a>
           <a href="/work/">Our work</a>
           <a href="/approach/">About</a>
+          <a href="/admin/">Website admin</a>
         </nav>
         <div className="footer-right">
           <button className="motion-toggle" aria-pressed="false" hidden={true}>

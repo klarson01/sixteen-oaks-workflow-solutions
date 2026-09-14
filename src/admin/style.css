@@ -436,3 +436,8 @@ footer {
 .invite-help input {
   overflow-wrap: anywhere;
 }
+
+.homepage-editor { display: grid; gap: 24px; }
+.homepage-overview { border-top: 3px solid #d1793b; }
+.homepage-editor h3 { margin-top: 0; }
+nav { flex-wrap: wrap; }

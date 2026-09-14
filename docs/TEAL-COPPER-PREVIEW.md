@@ -14,3 +14,5 @@ Two illustrative website photographs were generated with the built-in image-gene
 The existing supplied logo and oak photograph remain in use. The header logo's proportions are preserved. Layout is responsive, with two service columns and stacked photo/copy sections on narrow screens. Existing system and footer motion controls remain available.
 
 Validation: npm run build includes TypeScript, client/server builds, complete HTML generation, assets/anchor validation, and OrbitDesk file preservation. GitHub also runs the existing npm test suite. Visual review is performed on the deployed preview.
+
+Kevin approved this Main Street layout as the direction going forward on September 14, 2026. The existing admin now includes a Homepage editor, and the admin-selected featured project is connected again. This remains a preview pending a separate production deployment decision.

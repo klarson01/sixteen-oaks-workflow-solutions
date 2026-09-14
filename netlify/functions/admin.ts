@@ -25,8 +25,12 @@ export default async function (request: Request, context: Context) {
       });
     if (path === "content" && request.method === "PUT") {
       const body = await request.json();
-      const content = validateContent(body.content);
       const current = await readContent(context);
+      // A client without homepage fields must not erase saved homepage content.
+      const content = validateContent({
+        ...body.content,
+        homepage: body.content?.homepage ?? current.content.homepage,
+      });
       if (body.etag !== current.etag)
         return json(
           {

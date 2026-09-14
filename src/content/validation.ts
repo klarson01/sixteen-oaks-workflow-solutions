@@ -1,3 +1,4 @@
+import { defaultHomepage, homepageFieldGroups, type HomepageContent } from "./homepage";
 import type { SiteContent, Project, ProjectImage, MailSettings } from "./model";
 export class ValidationError extends Error {}
 export const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -61,6 +62,23 @@ function image(value: unknown, required: boolean): ProjectImage {
     width: integer(v.width, 1, 16000, "Image width"),
     height: integer(v.height, 1, 16000, "Image height"),
   };
+}
+export function validateHomepage(value: unknown): HomepageContent {
+  const h = obj(value);
+  const result = structuredClone(defaultHomepage);
+  for (const group of homepageFieldGroups) {
+    for (const [key, label, limit] of group.fields) result[key] = text(h[key], label, limit, true);
+  }
+  result.heroImage = image(h.heroImage, true);
+  result.communityImage = image(h.communityImage, true);
+  result.closingImage = image(h.closingImage, true);
+  if (!Array.isArray(h.services) || h.services.length !== 4)
+    throw new ValidationError("Keep all four service summaries.");
+  result.services = h.services.map((value) => {
+    const item = obj(value);
+    return { title: text(item.title, "Service title", 50, true), description: text(item.description, "Service description", 180, true) };
+  });
+  return result;
 }
 export function validateContent(value: unknown): SiteContent {
   const v = obj(value),
@@ -151,7 +169,7 @@ export function validateContent(value: unknown): SiteContent {
     throw new ValidationError(
       "Choose a published project for the homepage, or select None.",
     );
-  return { settings, projects };
+  return { settings, projects, ...(v.homepage === undefined ? {} : { homepage: validateHomepage(v.homepage) }) };
 }
 export function validateMail(value: unknown): MailSettings {
   const s = obj(value);

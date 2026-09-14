@@ -2423,7 +2423,9 @@ body:has(.mainstreet-home) .header-cta { background: var(--copper); border-color
 .community-copy h2 em { color: #a95926; }
 .community-copy > p:not(.eyebrow) { font-size: 1.05rem; line-height: 1.55; margin: 20px 0; max-width: 46ch; }
 .community-copy .button { min-height: 50px; }
-.landscape-cta { background: linear-gradient(90deg,rgba(2,26,31,.91),rgba(2,26,31,.3)),url('/assets/countryside-preview.webp') center 55% / cover; padding: 47px 0; }
+.landscape-cta { position: relative; isolation: isolate; background: var(--ink); padding: 47px 0; }
+.landscape-background { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; }
+.landscape-cta::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg,rgba(2,26,31,.91),rgba(2,26,31,.3)); }
 .landscape-cta-grid { display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; gap: 50px; }
 .landscape-cta .eyebrow { font-size: .65rem; letter-spacing: .23em; margin-bottom: 22px; }
 .landscape-cta .eyebrow::before { display: none; }
@@ -2493,3 +2495,8 @@ body:has(.mainstreet-home) .header-cta { background: var(--copper); border-color
 .footer-navigation a { display: inline-flex; align-items: center; min-height: 44px; }
 .footer-navigation a:hover { color: var(--copper-light); }
 @media (max-width: 1100px) { .footer-inner { flex-wrap: wrap; } }
+
+.editable-lines { white-space: pre-line; }
+.mainstreet-home .hero h1, .mainstreet-home .community-copy, .mainstreet-home .hero-description { overflow-wrap: anywhere; }
+
+.mainstreet-home .hero h1 > span { white-space: pre-line; }

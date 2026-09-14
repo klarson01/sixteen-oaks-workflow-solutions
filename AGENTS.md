@@ -10,6 +10,9 @@
 
 ## Approved design
 
+- Kevin selected the Main Street homepage layout on September 14, 2026 as the direction going forward: teal/copper, arched oak hero, four-service strip, Main Street photo/cream panel, and countryside closing banner. Preserve it unless he requests a change.
+- Homepage copy and photos are managed through the existing admin Homepage tab. Preserve saved content and use defaults only for workspaces that do not yet have homepage settings.
+
 - Preserve the approved deep teal #061e24 and copper #D1793B brand, supplied logo proportions, page layout, and restrained motion unless a requested change calls for a revision.
 - Keep working system and footer reduced-motion controls, native keyboard access, responsive navigation, and complete HTML for no-JavaScript visitors.
 - Use existing page components and shared styles. Keep the four public page routes stable.

@@ -63,3 +63,11 @@ Descriptions are sent to the AI provider through Netlify; the form tells visitor
 Admin access does not require a Netlify role. A verified session and an email on the server allowlist are required. If the Identity SDK only supplies JWT claims without the confirmation date, the server checks the actual user-session cookie against the same site’s Identity `/user` endpoint before authorizing access. Invalid, expired, unconfirmed, or non-allowlisted accounts remain denied.
 
 The admin has Save website changes controls above and below the editor, in the page flow so hosting preview toolbars cannot cover a fixed bottom save bar. Fill required image descriptions before saving published content.
+
+## Approved Main Street homepage
+
+Use `/admin/` on the selected Main Street preview (PR #4) for all edits going forward. The **Homepage** tab opens first and manages the opening copy and oak image, four service summaries, Main Street copy/photo/caption, and countryside closing banner. The teal/copper layout and link destinations remain consistent. **Save website changes**, then **View website** to review the saved result. No rebuild is needed for these content edits.
+
+The footer includes a **Website admin** link. It opens the existing protected sign-in page; admin authorization has not changed. Use the same invited account. **Our work**, **Contact & email**, and **Inbox** remain in this admin. The selected published featured project appears between the Main Street section and closing banner; choose **None** to omit it.
+
+Older workspaces use the approved homepage defaults until homepage content is saved; reading the workspace does not write or reset projects/settings. New homepage fields use the existing content record and conflict protection. When a client omits the homepage fields, this updated API preserves the saved homepage. Older comparison deployments still run older code, so use the PR #4 admin rather than editing through PR #2 or #3.
