@@ -15,7 +15,7 @@ export default function Home() {
                 data-hero=""
                 style={{ "--order": "0" } as CSSProperties}
               >
-                Thoughtful technology. Everyday possibility.
+                Practical tools for small business.
               </p>
               <h1 id="hero-title">
                 <span data-hero="" style={{ "--order": "1" } as CSSProperties}>
@@ -30,9 +30,8 @@ export default function Home() {
                 data-hero=""
                 style={{ "--order": "3" } as CSSProperties}
               >
-                Practical AI and websites built around your business. So you can
-                spend less time managing the work, and more time doing what you
-                do best.
+                Websites and practical AI built around your business.
+                Less time managing the work. More time doing what you do best.
               </p>
               <div
                 className="hero-actions"
@@ -46,7 +45,7 @@ export default function Home() {
                   </svg>
                 </a>
                 <a className="text-link" href="#ai-opportunity">
-                  Find your AI opportunity
+                  Find your biggest time-saver
                   <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M4 12h15m-6-6 6 6-6 6"></path>
                   </svg>
@@ -89,10 +88,6 @@ export default function Home() {
                   {...{ fetchpriority: "high" }}
                 />
               </div>
-              <figcaption className="hero-caption">
-                <span>Strong roots. Thoughtful growth.</span>
-                <span className="caption-index">SIXTEEN OAKS</span>
-              </figcaption>
             </figure>
           </div>
           <div className="hero-bottom">
