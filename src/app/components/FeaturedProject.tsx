@@ -1,4 +1,5 @@
 import { useSite } from "../../content/context";
+import { imageSrcSet } from "../lib/images";
 import { publishedProjects, projectUrl } from "../../content/model";
 export default function FeaturedProject() {
   const { content } = useSite();
@@ -20,6 +21,8 @@ export default function FeaturedProject() {
         >
           <img
             src={p.cover.src}
+            srcSet={imageSrcSet(p.cover.src, p.cover.width)}
+            sizes="(max-width: 700px) calc(100vw - 32px), 50vw"
             alt={p.cover.alt}
             width={p.cover.width}
             height={p.cover.height}

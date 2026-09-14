@@ -8,14 +8,19 @@ import { formToken } from "./_shared/secrets";
 let template: Promise<string> | undefined;
 export default async function (request: Request, context: Context) {
   try {
-    const { content } = await readContent(context);
+    // Independent reads run together; content stays fresh and tokens stay per request.
+    template ??= readFile(".build/template.html", "utf8");
+    const [{ content }, signingKey, shell] = await Promise.all([
+      readContent(context),
+      formKey(context),
+      template,
+    ]);
     const page = render(
       new URL(request.url).pathname,
       content,
-      formToken(await formKey(context)),
+      formToken(signingKey),
     );
-    template ??= readFile(".build/template.html", "utf8");
-    const html = renderDocument(await template, page);
+    const html = renderDocument(shell, page);
     return new Response(request.method === "HEAD" ? null : html, {
       status: page.notFound ? 404 : 200,
       headers: {

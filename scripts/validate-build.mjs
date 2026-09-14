@@ -73,6 +73,19 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
         attrs.rel?.includes("noopener"),
         route + ": safe external link",
       );
+    const srcset = attrs.srcset ?? attrs.srcSet;
+    if (srcset) {
+      for (const candidate of srcset.split(",")) {
+        const [address, descriptor] = candidate.trim().split(/\s+/);
+        const imageUrl = new URL(address, "https://local.test");
+        assert.equal(imageUrl.origin, "https://local.test", route + ": same-site image");
+        assert.equal(imageUrl.pathname, "/.netlify/images", route + ": image CDN route");
+        assert.equal(descriptor, imageUrl.searchParams.get("w") + "w", route + ": image width descriptor");
+        const original = imageUrl.searchParams.get("url");
+        assert.ok(original?.startsWith("/assets/") && !original.includes(".."), route + ": local source image");
+        assert.ok((await stat(fileFor(original))).isFile(), route + ": source image exists");
+      }
+    }
     const ref = attrs.src ?? attrs.href;
     if (!ref || /^(?:[a-z]+:|\/\/)/i.test(ref)) continue;
     const url = new URL(ref, "https://local.test" + route);

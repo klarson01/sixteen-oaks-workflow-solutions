@@ -87,3 +87,16 @@ Old styles remain unimported for reference. Existing dependencies remain pinned 
 ## Admin feature checks
 
 Run `npm test` before the build. This checks server authorization, signed submissions, persistence conflicts, draft visibility, and credential redaction using an in-memory storage fixture. Real Identity login and SMTP delivery require the one-time setup and a deployed Netlify site.
+
+
+## Public-page performance
+
+The homepage headline and opening paragraph render visibly without an entrance delay. The hero photo keeps its subtle zoom without starting transparent; other reveals and reduced-motion controls remain available.
+
+The shared image helper provides width-based WebP variants through Netlify Image CDN for the logo, homepage photos, and featured project. Original image URLs remain in `src` and in saved content, with their existing dimensions and descriptions. Uploaded public images use the same pipeline. Check these variants on a Netlify deploy or with Netlify Dev; plain Vite does not provide the `/.netlify/images` endpoint.
+
+The public renderer reads content, the form-signing key, and the HTML shell concurrently. HTML remains uncached so saved website edits are visible and inquiry tokens are generated for each response. The existing local font preloads and `font-display: swap` are retained.
+
+For mobile Lighthouse comparisons, use the same device/throttling settings and preview-toolbar conditions. The September 14, 2026 baseline on deploy `6aa74fd40366be0008b32c35` used Lighthouse 9.6.8: performance 59, accessibility 100, best practices 92, SEO 99, LCP 8.0 seconds, and server response 1.64 seconds. Netlify's preview toolbar contributed substantial script work; SEO crawlability was skipped in that report. Scores vary between runs and are not field measurements.
+
+The build validates responsive-image source files in addition to existing links and assets. Tests cover saved uploaded image selection, source dimensions, and visibility of the opening paragraph.

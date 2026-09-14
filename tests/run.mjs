@@ -8,6 +8,7 @@ await build({
   entryPoints: [
     "src/admin/invitation.ts",
     "src/content/homepage.ts",
+    "src/app/lib/images.ts",
     "netlify/functions/opportunity.ts",
     "src/content/opportunity.ts",
     "netlify/functions/admin.ts",
@@ -525,3 +526,36 @@ const escaped = structuredClone(homeContent);
 escaped.homepage.headline = '<script>alert(1)</script>';
 assert.ok(!render("/", validateContent(escaped)).html.includes('<script>alert(1)</script>'));
 console.log("Passed: homepage defaults, admin save/read/render, existing content preservation, legacy clients, conflicts, safe images, HTML escaping, and featured-project controls.");
+
+
+// Responsive images keep saved originals and only transform this site's public assets.
+const { imageSrcSet } = await import("../.build/tests/src/app/lib/images.js");
+function imageCandidates(value) {
+  assert.ok(value, "Responsive image candidates exist");
+  return value.split(", ").map((candidate) => {
+    const [address, descriptor] = candidate.split(" ");
+    const url = new URL(address, "https://example.test");
+    assert.equal(url.origin, "https://example.test");
+    assert.equal(url.pathname, "/.netlify/images");
+    assert.equal(url.searchParams.get("fm"), "webp");
+    assert.equal(descriptor, url.searchParams.get("w") + "w");
+    return url;
+  });
+}
+const upload = homeContent.homepage.heroImage.src;
+for (const src of ["/assets/sixteen-oaks-logo.png", upload]) {
+  const candidates = imageCandidates(imageSrcSet(src, 1254));
+  assert.ok(candidates.length > 1, "Phones and larger displays get different sizes");
+  assert.ok(candidates.every(url => url.searchParams.get("url") === src));
+  assert.ok(candidates.every(url => Number(url.searchParams.get("w")) <= 1254), "Never upscale the source");
+}
+for (const src of ["https://other.test/photo.jpg", "//other.test/photo.jpg", "/api/admin/content", "/assets/../private.png", "/assets/logo.svg"])
+  assert.equal(imageSrcSet(src, 1000), undefined, "Unsupported sources keep their original src");
+assert.equal(imageSrcSet("/assets/photo.jpg", NaN), undefined);
+const uploadedHeroTag = homeHtml.match(/<img\b[^>]*src="\/api\/media\/[^"]+"[^>]*>/)?.[0];
+assert.ok(uploadedHeroTag, "The saved uploaded hero is rendered");
+const uploadedSrcSet = uploadedHeroTag.match(/srcset="([^"]+)"/i)?.[1].replaceAll("&amp;", "&");
+assert.ok(imageCandidates(uploadedSrcSet).every(url => url.searchParams.get("url") === upload), "Uploaded hero variants use the uploaded photo, not the default");
+const openingParagraph = homeHtml.match(/<p\b[^>]*class="hero-description"[^>]*>/)?.[0];
+assert.ok(openingParagraph && !openingParagraph.includes("data-hero"), "Opening paragraph is not hidden by entrance animations");
+console.log("Passed: responsive local and uploaded images, original fallback URLs, bounded dimensions, and immediate opening content.");

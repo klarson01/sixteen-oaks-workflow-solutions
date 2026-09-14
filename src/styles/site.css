@@ -626,7 +626,7 @@ main:focus {
   font-size: 0.8125rem;
 }
 .contact-details a {
-  min-height: 32px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   overflow-wrap: anywhere;
@@ -992,7 +992,7 @@ html[data-navigating="true"] .route-status {
 }
 @keyframes photo-enter {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: scale(1.025);
   }
   to {
@@ -1422,7 +1422,7 @@ html[data-navigating="true"] .route-status {
   .contact-details {
     margin-top: 17px;
     display: grid;
-    gap: 0;
+    gap: 8px;
   }
   .footer-inner {
     display: grid;

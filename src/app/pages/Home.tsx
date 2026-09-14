@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import { Monitor, Settings, ChartNoAxesCombined, UsersRound, MapPin } from "lucide-react";
 import OpportunityFinder from "../components/OpportunityFinder";
 import Contact from "../components/Contact";
+import { imageSrcSet } from "../lib/images";
 
 function Arrow() {
   return <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" /></svg>;
@@ -24,14 +25,14 @@ export default function Home() {
       <section className="hero" id="top" aria-labelledby="hero-title">
         <div className="container mainstreet-hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow" data-hero="" style={{ "--order": "0" } as CSSProperties}>
+            <p className="eyebrow">
               <span className="editable-lines">{home.eyebrow}</span>
             </p>
             <h1 id="hero-title">
-              <span data-hero="" style={{ "--order": "1" } as CSSProperties}>{home.headline}</span>
-              <span data-hero="" style={{ "--order": "2" } as CSSProperties}><em>{home.headlineAccent}</em></span>
+              <span>{home.headline}</span>
+              <span><em>{home.headlineAccent}</em></span>
             </h1>
-            <p className="hero-description" data-hero="" style={{ "--order": "3" } as CSSProperties}>
+            <p className="hero-description">
               {home.description}
             </p>
             <div className="hero-actions" data-hero="" style={{ "--order": "4" } as CSSProperties}>
@@ -43,9 +44,9 @@ export default function Home() {
               {home.footnote}
             </div>
           </div>
-          <figure className="hero-visual" data-hero="" style={{ "--order": "2" } as CSSProperties}>
+          <figure className="hero-visual">
             <div className="hero-image-frame">
-              <img src={home.heroImage.src} srcSet={home.heroImage.src === "/assets/oak-landscape.webp" ? "/assets/oak-landscape-768.webp 768w, /assets/oak-landscape.webp 1536w" : undefined} sizes="(max-width: 640px) 100vw, 40vw" width={home.heroImage.width} height={home.heroImage.height} alt={home.heroImage.alt} loading="eager" decoding="async" {...{ fetchpriority: "high" }} />
+              <img src={home.heroImage.src} srcSet={imageSrcSet(home.heroImage.src, home.heroImage.width)} sizes="(max-width: 640px) calc(100vw - 32px), 40vw" width={home.heroImage.width} height={home.heroImage.height} alt={home.heroImage.alt} loading="eager" decoding="async" {...{ fetchpriority: "high" }} />
             </div>
           </figure>
           <aside className="hero-margin" aria-label="Our promise">
@@ -69,7 +70,7 @@ export default function Home() {
       </section>
       <section className="community-split" aria-labelledby="community-title">
         <figure className="community-photo">
-          <img src={home.communityImage.src} width={home.communityImage.width} height={home.communityImage.height} alt={home.communityImage.alt} loading="lazy" decoding="async" />
+          <img src={home.communityImage.src} srcSet={imageSrcSet(home.communityImage.src, home.communityImage.width)} sizes="(max-width: 820px) 100vw, 50vw" width={home.communityImage.width} height={home.communityImage.height} alt={home.communityImage.alt} loading="lazy" decoding="async" />
           {home.communityImage.caption && <figcaption className="editable-lines">{home.communityImage.caption}</figcaption>}
         </figure>
         <div className="community-copy" data-reveal="">
@@ -81,7 +82,7 @@ export default function Home() {
       </section>
       <FeaturedProject />
       <section className="landscape-cta" aria-labelledby="closing-title">
-        <img className="landscape-background" src={home.closingImage.src} width={home.closingImage.width} height={home.closingImage.height} alt="" loading="lazy" decoding="async" />
+        <img className="landscape-background" src={home.closingImage.src} srcSet={imageSrcSet(home.closingImage.src, home.closingImage.width)} sizes="100vw" width={home.closingImage.width} height={home.closingImage.height} alt="" loading="lazy" decoding="async" />
         <div className="container landscape-cta-grid">
           <div><p className="eyebrow">{home.closingEyebrow}</p>
             <h2 id="closing-title"><span className="editable-lines">{home.closingHeading}</span> <em>{home.closingAccent}</em></h2>
