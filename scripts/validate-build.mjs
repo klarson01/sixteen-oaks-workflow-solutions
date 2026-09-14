@@ -40,7 +40,7 @@ async function walk(directory) {
 }
 
 const titles = new Set();
-for (const route of [...routes, "/404.html"]) {
+for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
   const file = fileFor(route);
   const html = await loadDocument(file);
   assert.equal(
@@ -73,6 +73,22 @@ for (const route of [...routes, "/404.html"]) {
         attrs.rel?.includes("noopener"),
         route + ": safe external link",
       );
+    const srcset = attrs.srcset ?? attrs.srcSet;
+    if (srcset) {
+      for (const candidate of srcset.split(",")) {
+        const [address, descriptor] = candidate.trim().split(/\s+/);
+        const imageUrl = new URL(address, "https://local.test");
+        assert.equal(imageUrl.origin, "https://local.test", route + ": same-site image");
+        assert.match(descriptor ?? "", /^[1-9][0-9]*w$/, route + ": image width descriptor");
+        let original = imageUrl.pathname;
+        if (original === "/.netlify/images") {
+          assert.equal(descriptor, imageUrl.searchParams.get("w") + "w", route + ": CDN image width");
+          original = imageUrl.searchParams.get("url");
+        }
+        assert.ok(original?.startsWith("/assets/") && !original.includes(".."), route + ": local source image");
+        assert.ok((await stat(fileFor(original))).isFile(), route + ": source image exists");
+      }
+    }
     const ref = attrs.src ?? attrs.href;
     if (!ref || /^(?:[a-z]+:|\/\/)/i.test(ref)) continue;
     const url = new URL(ref, "https://local.test" + route);

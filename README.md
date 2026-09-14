@@ -24,10 +24,12 @@ npm run preview
 | ---------- | --------------------------------- |
 | /          | Home and featured project         |
 | /services/ | Services                          |
-| /work/     | Ray’s Mobile Repair case study    |
+| /work/     | Published project gallery        |
+| /work/:slug/ | Individual project case study |
+| /admin/ | Private project, contact, and inquiry administration |
 | /approach/ | Approach, background, and contact |
 
-React components generate complete HTML at build time. Vite bundles the shared CSS and browser motion code. Netlify serves static files; no application server or database is required.
+React components generate complete HTML both at build time and through a Netlify Function. Published content is read from Netlify Blobs on each request, so admin edits appear without a rebuild. Vite bundles the shared CSS, browser motion code, and private admin application.
 
 The browser enhances ordinary links with page transitions, scroll entrances, and a mobile menu. Content, navigation, email, and phone links remain available without JavaScript. System reduced motion and the footer setting both stop animation.
 
@@ -63,7 +65,7 @@ The older /logo-icon.png URL is also retained through the asset preparation step
 
 ## Contact behavior
 
-The approved design uses email and telephone links. Clicking email opens the visitor’s mail application. This site does not submit a contact form or send email itself.
+Every contact section includes an inquiry form plus email and telephone links. Inquiries save to the private admin Inbox before optional email delivery. Public contact details, the notification recipient, and the SMTP connection are editable in /admin/. See [Admin setup](docs/ADMIN-SETUP.md) for one-time activation and daily use.
 
 ## Assets and origin
 

@@ -26,7 +26,7 @@ export default function Navigation({
           key={url}
           className={mobile ? undefined : "nav-link"}
           href={url}
-          aria-current={path === url ? "page" : undefined}
+          aria-current={path === url || (url === "/work/" && path.startsWith("/work/")) ? "page" : undefined}
         >
           {routes[url].label}
           {mobile ? <Arrow /> : null}
