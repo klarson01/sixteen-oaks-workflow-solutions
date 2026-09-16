@@ -275,7 +275,7 @@ export default function initializeMotion() {
           anchor.setAttribute("href", `${path}#contact`);
           return;
         }
-        if (url.pathname === path) anchor.setAttribute("aria-current", "page");
+        if (url.pathname === path || (url.pathname === "/work/" && path.startsWith("/work/"))) anchor.setAttribute("aria-current", "page");
         else anchor.removeAttribute("aria-current");
       });
     document
@@ -417,7 +417,7 @@ export default function initializeMotion() {
     )
       return;
     const url = new URL(anchor.href, location.href);
-    if (url.origin !== location.origin || !allowedPaths.has(url.pathname))
+    if (url.origin !== location.origin || (!allowedPaths.has(url.pathname) && !/^\/work\/[a-z0-9]+(?:-[a-z0-9]+)*\/$/.test(url.pathname)))
       return;
     event.preventDefault();
     if (url.pathname === currentPath && url.search === currentSearch) {

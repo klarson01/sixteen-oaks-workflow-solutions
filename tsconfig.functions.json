@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "@netlify/functions"],
+    "allowJs": true
+  },
+  "include": ["netlify/functions", "src", "scripts/render-document.mjs"]
+}

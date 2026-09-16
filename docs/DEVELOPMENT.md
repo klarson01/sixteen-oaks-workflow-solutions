@@ -25,14 +25,14 @@ npm run build
 
 The build performs these steps:
 
-1. Type-check the React pages and Vite configuration.
+1. Type-check the public pages, admin, Netlify Functions, and Vite configuration.
 2. Preserve the legacy logo URL.
-3. Build the browser CSS and motion code with Vite.
+3. Build the browser CSS, motion code, and admin entry with Vite.
 4. Build the React page renderer into the ignored .build/ directory.
-5. Generate complete HTML for the four routes and a 404 page.
+5. Save the Vite shell for runtime rendering, then generate complete HTML for the four main routes, published seed projects, and a 404 page.
 6. Validate internal links, anchors, image alternatives, metadata, navigation, stylesheet assets, reduced-motion hooks, and copied OrbitDesk update files.
 
-Only dist/ is published. .build/, node_modules/, and local environment files are not deployment content.
+Static assets are published from dist/. Netlify bundles the functions and includes .build/template.html in the public renderer. Local environment files are never committed or published.
 
 ```sh
 npm run preview
@@ -64,7 +64,7 @@ Reuse the dedicated Sixteen Oaks Netlify project and this repository connection.
 
 netlify.toml declares the build and runtime settings. Repository linking and Deploy Preview access settings are managed in Netlify. A configuration file alone does not confirm the account connection.
 
-Netlify serves the generated route HTML directly. There is no catch-all rewrite to the homepage. Unknown URLs use the generated 404 page.
+Netlify renders public pages through the site function using current Blobs content. Assets, admin HTML, and OrbitDesk update files remain static. There is no catch-all SPA rewrite. Unknown project paths return a rendered 404.
 
 ## Before merging
 
@@ -80,6 +80,23 @@ The initial migration preserves the existing public/orbitdesk/ feed and release 
 
 The previous site used a single large React component and a client-rendered homepage. The refreshed site uses shared React templates and static output. The browser receives lightweight motion code, rather than a React runtime for an otherwise static page.
 
-The previous contact form only changed its local display to a success message. The approved site uses the user's confirmed email and phone links; it makes no claim to send a form.
+The current contact form saves messages to the admin Inbox before reporting success. Optional SMTP notifications are configured in the same admin. See ADMIN-SETUP.md for Identity activation, encrypted credentials, preview isolation, and daily content editing.
 
 Old styles remain unimported for reference. Existing dependencies remain pinned at their original versions; the migration adds TypeScript declaration packages and a lockfile.
+
+## Admin feature checks
+
+Run `npm test` before the build. This checks server authorization, signed submissions, persistence conflicts, draft visibility, and credential redaction using an in-memory storage fixture. Real Identity login and SMTP delivery require the one-time setup and a deployed Netlify site.
+
+
+## Public-page performance
+
+The homepage headline and opening paragraph render visibly without an entrance delay. The hero photo keeps its subtle zoom without starting transparent; other reveals and reduced-motion controls remain available.
+
+The shared image helper provides width-based WebP variants through Netlify Image CDN for the logo, homepage photos, and featured project. Original image URLs remain in `src` and in saved content, with their existing dimensions and descriptions. Uploaded public images use the same pipeline. Check these variants on a Netlify deploy or with Netlify Dev; plain Vite does not provide the `/.netlify/images` endpoint.
+
+The public renderer reads content, the form-signing key, and the HTML shell concurrently. HTML remains uncached so saved website edits are visible and inquiry tokens are generated for each response. The existing local font preloads and `font-display: swap` are retained.
+
+For mobile Lighthouse comparisons, use the same device/throttling settings and preview-toolbar conditions. The September 14, 2026 baseline on deploy `6aa74fd40366be0008b32c35` used Lighthouse 9.6.8: performance 59, accessibility 100, best practices 92, SEO 99, LCP 8.0 seconds, and server response 1.64 seconds. Netlify's preview toolbar contributed substantial script work; SEO crawlability was skipped in that report. Scores vary between runs and are not field measurements.
+
+The build validates responsive-image source files in addition to existing links and assets. Tests cover saved uploaded image selection, source dimensions, and visibility of the opening paragraph.
