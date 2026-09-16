@@ -7,6 +7,7 @@ import {
   type RoutePath,
 } from "./app/routes";
 import { SiteContext, defaultContent } from "./content/context";
+import { searchMetadata } from "./content/search";
 import {
   publishedProjects,
   projectUrl,
@@ -46,6 +47,7 @@ export function render(
       </SiteContext.Provider>,
     ),
     ...metadata,
+    ...searchMetadata(path, content, metadata),
     notFound: path === "/404/",
   };
 }

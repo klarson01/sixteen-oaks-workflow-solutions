@@ -9,6 +9,9 @@ await build({
     "src/admin/invitation.ts",
     "src/content/homepage.ts",
     "src/app/lib/images.ts",
+    "src/content/search.ts",
+    "netlify/functions/search.ts",
+    "netlify/functions/site.ts",
     "netlify/functions/opportunity.ts",
     "src/content/opportunity.ts",
     "netlify/functions/admin.ts",
@@ -562,3 +565,4 @@ assert.ok(openingParagraph && !openingParagraph.includes("data-hero"), "Opening 
 console.log("Passed: responsive local and uploaded images, original fallback URLs, bounded dimensions, and immediate opening content.");
 
 await import("./launch.mjs");
+await import("./search.mjs");

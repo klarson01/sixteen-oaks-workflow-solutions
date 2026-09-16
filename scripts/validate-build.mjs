@@ -63,6 +63,15 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
     route + ": page description",
   );
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
+  if (route === "/404.html") {
+    assert.match(html, /name="robots" content="noindex, nofollow"/);
+    assert.ok(!html.includes('rel="canonical"'), "404 has no canonical public page");
+  } else {
+    assert.ok(html.includes('rel="canonical" href="https://sixteenoaksllc.com' + route + '"'), route + ": business-domain canonical");
+    const schema = html.match(/<script type="application\/ld\+json" data-site-schema="">([\s\S]*?)<\/script>/)?.[1];
+    assert.ok(schema, route + ": structured data");
+    assert.ok(JSON.parse(schema)["@graph"].some(node => node["@type"] === "Organization"));
+  }
   assert.equal(ids.length, new Set(ids).size, route + ": unique element IDs");
   for (const match of html.matchAll(/<(?:a|img|script|link)\b([^>]*)>/g)) {
     const attrs = attributes(match[1]);
