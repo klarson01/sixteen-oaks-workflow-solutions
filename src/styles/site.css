@@ -1644,6 +1644,10 @@ html[data-navigating="true"] .route-status {
 .case-figure {
   margin: 0 0 64px;
 }
+.case-figure img {
+  width: 100%;
+  height: auto;
+}
 .case-figure figcaption {
   font-size: 0.8125rem;
   color: #52615e;
@@ -1995,7 +1999,7 @@ html[data-motion="off"]::view-transition-group(root) {
   width: 100%;
   height: auto;
   aspect-ratio: 1.46;
-  object-fit: cover;
+  object-fit: contain;
 }
 .project-card h2 {
   font-size: clamp(28px, 3vw, 42px);
