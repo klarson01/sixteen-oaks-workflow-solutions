@@ -12,6 +12,8 @@ for (const route of [...getRenderPaths(), "/404/"]) {
       ? "dist/404.html"
       : join("dist", route.slice(1), "index.html");
   await mkdir(dirname(destination), { recursive: true });
-  await writeFile(destination, renderDocument(template, render(route)));
+  await writeFile(destination, renderDocument(template, render(route), {
+    noIndex: process.env.CONTEXT !== "production",
+  }));
   console.log("Rendered " + destination);
 }

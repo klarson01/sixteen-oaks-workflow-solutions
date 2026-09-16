@@ -6,5 +6,8 @@ export function renderDocument(
     title: string;
     description: string;
     notFound?: boolean;
+    canonicalUrl?: string | null;
+    structuredData?: Record<string, unknown> | null;
   },
+  options?: { noIndex?: boolean },
 ): string;

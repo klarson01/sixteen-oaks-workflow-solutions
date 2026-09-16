@@ -82,6 +82,8 @@ The previous site used a single large React component and a client-rendered home
 
 The current contact form saves messages to the admin Inbox before reporting success. Optional SMTP notifications are configured in the same admin. See ADMIN-SETUP.md for Identity activation, encrypted credentials, preview isolation, and daily content editing.
 
+Search metadata and the live sitemap use the current saved content. See [SEARCH-SETUP.md](SEARCH-SETUP.md) for indexing controls, Google/Bing ownership verification, and sitemap submission.
+
 Old styles remain unimported for reference. Existing dependencies remain pinned at their original versions; the migration adds TypeScript declaration packages and a lockfile.
 
 ## Admin feature checks

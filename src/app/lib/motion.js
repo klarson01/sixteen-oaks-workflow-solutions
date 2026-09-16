@@ -288,12 +288,17 @@ export default function initializeMotion() {
       'meta[name="description"]',
       'meta[property="og:title"]',
       'meta[property="og:description"]',
+      'meta[property="og:url"]',
+      'meta[name="robots"]',
+      'link[rel="canonical"]',
+      'script[data-site-schema]',
     ]) {
       const incoming = page.querySelector(selector);
-      if (incoming)
-        document
-          .querySelector(selector)
-          ?.setAttribute("content", incoming.content);
+      const current = document.head.querySelector(selector);
+      if (incoming) {
+        if (current) current.replaceWith(incoming.cloneNode(true));
+        else document.head.append(incoming.cloneNode(true));
+      } else current?.remove();
     }
   }
   function setLoading(loading) {
