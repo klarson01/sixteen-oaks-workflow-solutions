@@ -34,7 +34,7 @@ Up to 100 projects are supported. Images must be JPG, PNG, or WebP under 2 MB. R
 
 ## Preview and production
 
-Production uses `sixteen-oaks-live`, which persists across production deployments. Deploy previews share a stable review store, `sixteen-oaks-preview-6aa56e2f692ceb00088cc1fc`, and display a clear preview banner. This preserves the workspace where project entry began; the identifier is not a credential. Preview edits, uploaded images, email connection, and test inquiries do not affect production. A new preview deployment preserves saved projects, images, settings, and inquiries. Other branch deployments remain isolated by deploy ID. Re-enter reviewed content on production after the code is merged; never copy test inquiries or preview media URLs into the live store.
+Production uses `sixteen-oaks-live`, which persists across production deployments. Deploy previews share a stable review store, `sixteen-oaks-preview-6aa56e2f692ceb00088cc1fc`, and display a clear preview banner. This preserves the workspace where project entry began; the identifier is not a credential. Preview edits, uploaded images, email connection, and test inquiries do not affect production. A new preview deployment preserves saved projects, images, settings, and inquiries. Other branch deployments remain isolated by deploy ID. The September 16, 2026 launch copies the reviewed preview content, referenced uploaded images, and encrypted mail connection once into an empty production workspace. It copies media bytes into the live store so the same relative image addresses resolve there. Draft projects stay private. Test inquiries, request counters, and form-signing keys are excluded. Production and preview remain separate after this initial transfer; future preview edits do not change the live website.
 
 The existing Ray's example is the seed content for a workspace that has not been edited. Once saved, admin content is authoritative; changing the seed file does not overwrite saved content.
 
@@ -73,3 +73,12 @@ Use `/admin/` on the selected Main Street preview (PR #4) for all edits going fo
 The footer includes a **Website admin** link. It opens the existing protected sign-in page; admin authorization has not changed. Use the same invited account. **Our work**, **Contact & email**, and **Inbox** remain in this admin. The selected published featured project appears between the Main Street section and closing banner; choose **None** to omit it.
 
 Older workspaces use the approved homepage defaults until homepage content is saved; reading the workspace does not write or reset projects/settings. New homepage fields use the existing content record and conflict protection. When a client omits the homepage fields, this updated API preserves the saved homepage. Older comparison deployments still run older code, so use the PR #4 admin rather than editing through PR #2 or #3.
+
+
+## Production launch transfer
+
+`netlify/functions/_shared/launch.ts` initializes only the dedicated Sixteen Oaks site ID in the production deploy context. It freezes a private launch snapshot, verifies that the existing production encryption key can read the saved mail password, copies referenced media in bounded batches, and writes content only after those dependencies are ready. Conditional writes preserve an existing production workspace and allow an interrupted transfer to resume without resetting newer edits. No passwords or encryption keys are returned to clients or written to GitHub. The private `launch-2026-09-16/complete` record identifies a completed copy; the snapshot remains available for recovery.
+
+The public renderer and authenticated admin wait for initialization. A missing image or encryption key prevents publishing partial content; correct the missing dependency and retry the request. This is a one-time launch, not a permanent fallback to preview data. Once the launch has been verified, the initializer may be retired in a later cleanup without deleting production content.
+
+Business-domain configuration: DreamHost keeps DNS and mail forwarding. The apex uses an ALIAS to `apex-loadbalancer.netlify.com`; `www` uses a CNAME to `sixteenoaks.netlify.app`. Both names are attached to the existing Sixteen Oaks Netlify project. Manage the website at `/admin/` on the live domain after production deployment and HTTPS activation.

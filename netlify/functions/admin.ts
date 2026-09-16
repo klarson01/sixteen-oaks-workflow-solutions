@@ -10,10 +10,12 @@ import { requireAdmin } from "./_shared/auth";
 import { storeFor, readContent, json } from "./_shared/store";
 import { seal, secretKeyValue } from "./_shared/secrets";
 import { deliver, type StoredMail } from "./_shared/mail";
+import { ensureProductionLaunch } from "./_shared/launch";
 
 export default async function (request: Request, context: Context) {
   try {
     await requireAdmin(request);
+    await ensureProductionLaunch(context);
     const path = new URL(request.url).pathname.replace(/^\/api\/admin\/?/, "");
     const store = storeFor(context);
     if (Number(request.headers.get("content-length") ?? 0) > 3000000)

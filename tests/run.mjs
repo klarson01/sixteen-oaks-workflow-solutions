@@ -15,6 +15,7 @@ await build({
     "netlify/functions/inquiries.ts",
     "netlify/functions/_shared/auth.ts",
     "netlify/functions/_shared/store.ts",
+    "netlify/functions/_shared/launch.ts",
     "netlify/functions/_shared/secrets.ts",
     "netlify/functions/_shared/form-key.ts",
     "src/content/validation.ts",
@@ -559,3 +560,5 @@ assert.ok(imageCandidates(uploadedSrcSet).every(url => url.searchParams.get("url
 const openingParagraph = homeHtml.match(/<p\b[^>]*class="hero-description"[^>]*>/)?.[0];
 assert.ok(openingParagraph && !openingParagraph.includes("data-hero"), "Opening paragraph is not hidden by entrance animations");
 console.log("Passed: responsive local and uploaded images, original fallback URLs, bounded dimensions, and immediate opening content.");
+
+await import("./launch.mjs");

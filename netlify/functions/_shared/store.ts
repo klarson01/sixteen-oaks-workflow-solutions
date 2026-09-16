@@ -2,6 +2,7 @@ import { getStore } from "@netlify/blobs";
 import type { Context } from "@netlify/functions";
 import seed from "../../../src/content/seed.json";
 import type { SiteContent } from "../../../src/content/model";
+import { ensureProductionLaunch } from "./launch";
 export function storeFor(context: Context) {
   const scope =
     context.deploy.context === "production"
@@ -14,6 +15,7 @@ export function storeFor(context: Context) {
   return getStore({ name: `sixteen-oaks-${scope}`, consistency: "strong" });
 }
 export async function readContent(context: Context) {
+  await ensureProductionLaunch(context);
   const result = await storeFor(context).getWithMetadata("content", {
     type: "json",
   });
