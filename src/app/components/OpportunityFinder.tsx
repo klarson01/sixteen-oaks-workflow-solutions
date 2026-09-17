@@ -63,7 +63,7 @@ export default function OpportunityFinder() {
             <p id="opportunity-privacy" className="finder-note">
               Your description is sent to an AI service to generate a
               suggestion. Keep names, customer details, and confidential
-              information out.
+              information out. See our <a href="/privacy/">Privacy Policy</a>.
             </p>
             <div className="finder-actions finder-live-action">
               <button className="button" type="submit" data-find-opportunity="">

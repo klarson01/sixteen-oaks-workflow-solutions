@@ -23,11 +23,20 @@ export const routes = {
     description:
       "A personal, practical approach to better business tools. Listen first, agree on a useful next step, and build around your everyday work.",
   },
+  "/privacy/": {
+    label: "Privacy",
+    title: "Privacy Policy | Sixteen Oaks Workflow Solutions",
+    description:
+      "Learn how Sixteen Oaks Workflow Solutions collects, uses, protects, and shares information submitted through this website.",
+  },
 } as const;
 
 export type RoutePath = keyof typeof routes;
 export type PagePath = RoutePath | "/404/" | `/work/${string}/`;
 export const routePaths = Object.keys(routes) as RoutePath[];
+export const primaryRoutePaths = routePaths.filter(
+  (path) => path !== "/privacy/",
+);
 
 export function resolvePagePath(path: string): PagePath {
   const normalized = path === "/" ? "/" : path.replace(/\/+$/, "") + "/";

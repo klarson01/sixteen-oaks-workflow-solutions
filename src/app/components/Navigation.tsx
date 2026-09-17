@@ -1,4 +1,4 @@
-import { routes, routePaths, type PagePath } from "../routes";
+import { routes, primaryRoutePaths, type PagePath } from "../routes";
 
 function Arrow() {
   return (
@@ -15,13 +15,14 @@ export default function Navigation({
   path: PagePath;
   mobile?: boolean;
 }) {
-  const contactPath = path === "/404/" ? "/" : path;
+  const contactPath =
+    path === "/404/" || path === "/privacy/" ? "/" : path;
   return (
     <nav
       className={mobile ? "mobile-links" : "desktop-nav"}
       aria-label={mobile ? "Mobile navigation" : "Main navigation"}
     >
-      {routePaths.map((url) => (
+      {primaryRoutePaths.map((url) => (
         <a
           key={url}
           className={mobile ? undefined : "nav-link"}

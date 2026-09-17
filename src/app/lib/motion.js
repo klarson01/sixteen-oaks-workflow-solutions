@@ -12,7 +12,13 @@ export default function initializeMotion() {
   const menuButton = document.querySelector(".menu-toggle");
   const announcement = document.getElementById("page-announcement");
   const header = document.querySelector(".site-header");
-  const allowedPaths = new Set(["/", "/services/", "/work/", "/approach/"]);
+  const allowedPaths = new Set([
+    "/",
+    "/services/",
+    "/work/",
+    "/approach/",
+    "/privacy/",
+  ]);
   const activeAnimations = new Set();
   const routeAnimations = new Set();
   let preference = "system";

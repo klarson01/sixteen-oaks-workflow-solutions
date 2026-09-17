@@ -3,7 +3,8 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { join, extname, resolve } from "node:path";
 
 const output = resolve("dist");
-const routes = ["/", "/services/", "/work/", "/approach/"];
+const routes = ["/", "/services/", "/work/", "/approach/", "/privacy/"];
+const primaryRoutes = ["/", "/services/", "/work/", "/approach/"];
 const documents = new Map();
 const decode = (value) =>
   value.replaceAll("&amp;", "&").replaceAll("&quot;", '"');
@@ -114,7 +115,7 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
       );
     }
   }
-  if (routes.includes(route)) {
+  if (primaryRoutes.includes(route)) {
     const nav =
       html.match(/<nav class="desktop-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? "";
     assert.equal(
@@ -122,7 +123,7 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
       1,
       route + ": active navigation",
     );
-    for (const expected of routes)
+    for (const expected of primaryRoutes)
       assert.ok(
         nav.includes('href="' + expected + '"'),
         route + ": all navigation links",

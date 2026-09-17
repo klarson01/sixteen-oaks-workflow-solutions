@@ -2082,6 +2082,11 @@ html[data-motion="off"]::view-transition-group(root) {
   opacity: 0.65;
   margin-top: 16px;
 }
+.form-privacy a,
+.finder-note a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .inquiry-form button:disabled {
   opacity: 0.65;
   cursor: wait;
@@ -2091,6 +2096,88 @@ html[data-motion="off"]::view-transition-group(root) {
 }
 .contact-grid {
   align-items: start;
+}
+
+.legal-section {
+  padding-block: 80px 110px;
+}
+.legal-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.65fr) minmax(0, 1.65fr);
+  gap: clamp(52px, 8vw, 120px);
+  align-items: start;
+}
+.legal-summary {
+  position: sticky;
+  top: 120px;
+  border-top: 2px solid var(--copper);
+  padding-top: 24px;
+  color: #42524d;
+}
+.legal-summary .eyebrow {
+  color: #765038;
+  margin-bottom: 18px;
+}
+.legal-summary > p:not(.eyebrow) {
+  font-size: 1rem;
+}
+.legal-summary .legal-date {
+  margin-top: 24px;
+  font-size: 0.8125rem;
+  color: #65726d;
+}
+.legal-content {
+  max-width: 780px;
+}
+.legal-content section {
+  border-top: 1px solid #bdc7bf;
+  padding: 36px 0 42px;
+}
+.legal-content section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.legal-content h2 {
+  font-size: clamp(2rem, 3vw, 2.65rem);
+  letter-spacing: -0.025em;
+  margin-bottom: 18px;
+}
+.legal-content h3 {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #765038;
+  margin: 28px 0 8px;
+}
+.legal-content p,
+.legal-content li {
+  color: #42524d;
+}
+.legal-content p + p {
+  margin-top: 18px;
+}
+.legal-content ul {
+  display: grid;
+  gap: 10px;
+  padding-left: 1.25rem;
+}
+.legal-content a {
+  color: #6d3d20;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 820px) {
+  .legal-layout {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  .legal-summary {
+    position: static;
+    max-width: 620px;
+  }
 }
 @media (max-width: 700px) {
   .project-grid,
