@@ -46,5 +46,19 @@ export function renderDocument(template, page, { noIndex = false } = {}) {
         escapeHtml(page.description) +
         '">',
     )
+    .replace(
+      /<meta\b(?=[^>]*\bname="twitter:title")[^>]*>/,
+      () =>
+        '<meta name="twitter:title" content="' +
+        escapeHtml(page.title) +
+        '">',
+    )
+    .replace(
+      /<meta\b(?=[^>]*\bname="twitter:description")[^>]*>/,
+      () =>
+        '<meta name="twitter:description" content="' +
+        escapeHtml(page.description) +
+        '">',
+    )
     .replace("</head>", () => searchHead.join("\n") + "\n</head>");
 }

@@ -26,6 +26,11 @@ assert.equal(schema["@graph"].find(node => node["@type"] === "WebPage").name, pa
 assert.equal(schema["@graph"].find(node => node["@type"] === "Organization").email, content.settings.publicEmail);
 assert.match(html, /<meta name="robots" content="index, follow">/);
 assert.equal((html.match(/rel="canonical"/g) ?? []).length, 1);
+assert.match(html, /<meta property="og:url" content="https:\/\/sixteenoaksllc\.com\/work\/rays-mobile-repair\/">/);
+assert.match(html, /<meta\s+property="og:image"\s+content="https:\/\/sixteenoaksllc\.com\/assets\/sixteen-oaks-social-share\.jpg"/);
+assert.match(html, /<meta name="twitter:card" content="summary_large_image"/);
+assert.ok(html.includes('<meta name="twitter:title" content="' + page.title.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;") + '">'));
+assert.ok(html.includes('<meta name="twitter:description" content="' + page.description + '">'));
 assert.match(renderDocument(template, page, { noIndex: true }), /content="noindex, nofollow"/);
 for (const missing of ["/work/private-project/", "/work/does-not-exist/", "/unknown/"]) {
   const missingPage = render(missing, content);

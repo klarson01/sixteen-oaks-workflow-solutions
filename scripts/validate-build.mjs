@@ -22,6 +22,13 @@ function attributes(text) {
     ]),
   );
 }
+function metadata(html, attribute, value) {
+  for (const match of html.matchAll(/<meta\b([^>]*)>/g)) {
+    const attrs = attributes(match[1]);
+    if (attrs[attribute] === value) return attrs.content;
+  }
+  return undefined;
+}
 async function loadDocument(file) {
   if (!documents.has(file)) documents.set(file, await readFile(file, "utf8"));
   return documents.get(file);
@@ -37,6 +44,24 @@ async function walk(directory) {
       ),
     )
   ).flat();
+}
+function jpegDimensions(image) {
+  const startOfFrame = new Set([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf]);
+  for (let offset = 2; offset + 9 < image.length; ) {
+    if (image[offset] !== 0xff) {
+      offset += 1;
+      continue;
+    }
+    const marker = image[offset + 1];
+    if (startOfFrame.has(marker))
+      return { height: image.readUInt16BE(offset + 5), width: image.readUInt16BE(offset + 7) };
+    if (marker === 0xd8 || marker === 0xd9) {
+      offset += 2;
+      continue;
+    }
+    offset += 2 + image.readUInt16BE(offset + 2);
+  }
+  throw new Error("Social image JPEG dimensions were not found.");
 }
 
 const titles = new Set();
@@ -62,12 +87,23 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
     /<meta\s+name="description"\s+content="[^"]+"/,
     route + ": page description",
   );
+  const description = metadata(html, "name", "description");
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
   if (route === "/404.html") {
     assert.match(html, /name="robots" content="noindex, nofollow"/);
     assert.ok(!html.includes('rel="canonical"'), "404 has no canonical public page");
   } else {
     assert.ok(html.includes('rel="canonical" href="https://sixteenoaksllc.com' + route + '"'), route + ": business-domain canonical");
+    assert.equal(metadata(html, "property", "og:title"), title, route + ": Open Graph title");
+    assert.equal(metadata(html, "property", "og:description"), description, route + ": Open Graph description");
+    assert.equal(metadata(html, "property", "og:url"), "https://sixteenoaksllc.com" + route, route + ": Open Graph URL");
+    assert.equal(metadata(html, "property", "og:image"), "https://sixteenoaksllc.com/assets/sixteen-oaks-social-share.jpg", route + ": Open Graph image");
+    assert.equal(metadata(html, "property", "og:image:width"), "1200", route + ": Open Graph image width");
+    assert.equal(metadata(html, "property", "og:image:height"), "630", route + ": Open Graph image height");
+    assert.equal(metadata(html, "name", "twitter:card"), "summary_large_image", route + ": X card type");
+    assert.equal(metadata(html, "name", "twitter:title"), title, route + ": X card title");
+    assert.equal(metadata(html, "name", "twitter:description"), description, route + ": X card description");
+    assert.equal(metadata(html, "name", "twitter:image"), "https://sixteenoaksllc.com/assets/sixteen-oaks-social-share.jpg", route + ": X card image");
     const schema = html.match(/<script type="application\/ld\+json" data-site-schema="">([\s\S]*?)<\/script>/)?.[1];
     assert.ok(schema, route + ": structured data");
     assert.ok(JSON.parse(schema)["@graph"].some(node => node["@type"] === "Organization"));
@@ -134,6 +170,9 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
 const cssFiles = (await walk(join(output, "assets"))).filter(
   (file) => extname(file) === ".css",
 );
+const socialImage = await readFile(fileFor("/assets/sixteen-oaks-social-share.jpg"));
+assert.equal(socialImage.subarray(0, 3).toString("hex"), "ffd8ff", "Social image is a JPEG");
+assert.deepEqual(jpegDimensions(socialImage), { width: 1200, height: 630 }, "Social image is 1200 × 630");
 assert.ok(cssFiles.length, "Stylesheet exists");
 const styles = (
   await Promise.all(cssFiles.map((file) => readFile(file, "utf8")))
