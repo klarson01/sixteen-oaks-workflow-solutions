@@ -65,7 +65,7 @@ The older /logo-icon.png URL is also retained through the asset preparation step
 
 ## Contact behavior
 
-Every contact section includes an inquiry form plus email and telephone links. Inquiries save to the private admin Inbox before optional email delivery. Public contact details, the notification recipient, and the SMTP connection are editable in /admin/. See [Admin setup](docs/ADMIN-SETUP.md) for one-time activation and daily use, and [Backup and recovery](docs/BACKUP-RECOVERY.md) for the versioned admin-data archive and restore procedure.
+Every contact section includes an inquiry form plus email and telephone links. Inquiries save to the private admin Inbox before optional email delivery. Public contact details, the notification recipient, and the SMTP connection are editable in /admin/. The private Analytics tab reports cookie-free visits, traffic sources, popular pages, contact actions, and inquiry conversion. See [Admin setup](docs/ADMIN-SETUP.md) for one-time activation and daily use, [Visitor and lead analytics](docs/ANALYTICS.md) for measurement and privacy details, and [Backup and recovery](docs/BACKUP-RECOVERY.md) for the versioned admin-data archive and restore procedure.
 
 ## Assets and origin
 

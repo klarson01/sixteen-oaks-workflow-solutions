@@ -38,6 +38,12 @@ The private **Backup & recovery** section downloads a versioned ZIP containing s
 
 The ZIP never contains the Netlify encryption key, administrator accounts, environment variables, or DNS configuration. Keep the existing case-sensitive `Sixteen_Oaks_Secret_Key` value in an approved password manager; the SMTP ciphertext in a backup is usable only with that same key. Because the archive contains inquiries, store it privately and never commit it to GitHub. See [Backup and recovery](BACKUP-RECOVERY.md) for the operating procedure and full-site recovery order.
 
+## Visitor and lead analytics
+
+The private **Analytics** tab reports anonymous sessions, page views, completed inquiries, inquiry conversion, popular pages, traffic sources, and contact actions for the last 7, 30, or 90 days. It is first-party and cookie-free. It stores no IP addresses, user-agent strings, full referring URLs, or personal visitor profiles, and it honors browser Do Not Track and Global Privacy Control settings.
+
+Production and preview analytics are isolated with the rest of their Blob data. Daily aggregates are retained for 400 days and older production records are removed by a scheduled function. Analytics begins collecting after deployment and is not retroactive. See [Visitor and lead analytics](ANALYTICS.md) for definitions, privacy design, and verification details.
+
 ## Preview and production
 
 Production uses `sixteen-oaks-live`, which persists across production deployments. Deploy previews share a stable review store, `sixteen-oaks-preview-6aa56e2f692ceb00088cc1fc`, and display a clear preview banner. This preserves the workspace where project entry began; the identifier is not a credential. Preview edits, uploaded images, email connection, and test inquiries do not affect production. A new preview deployment preserves saved projects, images, settings, and inquiries. Other branch deployments remain isolated by deploy ID. The September 16, 2026 launch copies the reviewed preview content, referenced uploaded images, and encrypted mail connection once into an empty production workspace. It copies media bytes into the live store so the same relative image addresses resolve there. Draft projects stay private. Test inquiries, request counters, and form-signing keys are excluded. Production and preview remain separate after this initial transfer; future preview edits do not change the live website.
@@ -48,9 +54,10 @@ The existing Ray's example is the seed content for a workspace that has not been
 
 - `src/content/`: data model, seed, and server validation.
 - `src/admin/`: private React UI using `@netlify/identity`.
-- `netlify/functions/admin.ts`: authenticated content, mail, upload, inbox, backup, and restore API.
+- `netlify/functions/admin.ts`: authenticated content, mail, upload, inbox, analytics, backup, and restore API.
 - `site.ts`: complete server-rendered public HTML with current content.
 - `inquiries.ts`: rate-limited, signed, idempotent submissions that save before sending.
+- `analytics.ts`: rate-limited, same-origin collection of anonymous aggregate events.
 - `media.ts`: uploaded public images; only administrators can upload.
 - `.build/template.html`: generated Vite HTML shell included in the site function.
 

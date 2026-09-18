@@ -396,6 +396,7 @@ export default function initializeMotion() {
       if (requestId === navigationId) {
         saveScroll();
         announcement.textContent = `${page.title.split(" | ")[0]}. Page loaded.`;
+        window.dispatchEvent(new CustomEvent("sixteen-oaks:navigation"));
       }
     } catch (error) {
       // A real link remains the reliable fallback, including offline/server failures.

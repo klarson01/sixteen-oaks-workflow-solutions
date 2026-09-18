@@ -16,6 +16,8 @@ await build({
     "src/content/opportunity.ts",
     "netlify/functions/admin.ts",
     "netlify/functions/inquiries.ts",
+    "netlify/functions/analytics.ts",
+    "netlify/functions/_shared/analytics.ts",
     "netlify/functions/_shared/auth.ts",
     "netlify/functions/_shared/store.ts",
     "netlify/functions/_shared/launch.ts",
@@ -38,6 +40,8 @@ const { default: admin } =
   await import("../.build/tests/netlify/functions/admin.js");
 const { default: submit } =
   await import("../.build/tests/netlify/functions/inquiries.js");
+const { default: track } =
+  await import("../.build/tests/netlify/functions/analytics.js");
 const { formKey } =
   await import("../.build/tests/netlify/functions/_shared/form-key.js");
 const { canAdmin } =
@@ -180,6 +184,84 @@ function submission(body) {
     body,
   });
 }
+function analyticsEvent(body, origin = "https://example.test", userAgent = "Browser") {
+  return new Request("https://example.test/api/analytics", {
+    method: "POST",
+    headers: {
+      Origin: origin,
+      "Content-Type": "application/json",
+      "User-Agent": userAgent,
+    },
+    body: JSON.stringify(body),
+  });
+}
+const analyticsSession = "123e4567-e89b-42d3-a456-426614174000";
+assert.equal(
+  (
+    await track(
+      analyticsEvent({
+        kind: "pageview",
+        path: "/",
+        session: analyticsSession,
+        referrer: "https://www.google.com/search?q=workflow",
+      }),
+      context,
+    )
+  ).status,
+  204,
+);
+assert.equal(
+  (
+    await track(
+      analyticsEvent({
+        kind: "pageview",
+        path: "/services/",
+        session: analyticsSession,
+        referrer: "https://example.test/",
+      }),
+      context,
+    )
+  ).status,
+  204,
+);
+assert.equal(
+  (
+    await track(
+      analyticsEvent({
+        kind: "form_start",
+        path: "/services/",
+        session: analyticsSession,
+      }),
+      context,
+    )
+  ).status,
+  204,
+);
+assert.equal(
+  (
+    await track(
+      analyticsEvent(
+        { kind: "pageview", path: "/", session: analyticsSession },
+        "https://attacker.test",
+      ),
+      context,
+    )
+  ).status,
+  403,
+);
+assert.equal(
+  (
+    await track(
+      analyticsEvent(
+        { kind: "pageview", path: "/", session: crypto.randomUUID() },
+        "https://example.test",
+        "ExampleBot/1.0",
+      ),
+      context,
+    )
+  ).status,
+  204,
+);
 assert.equal((await submit(submission(form), context)).status, 200);
 assert.equal((await submit(submission(form), context)).status, 200);
 let inbox = await (await admin(request("inbox"), context)).json();
@@ -197,6 +279,31 @@ assert.equal(
 assert.equal(
   (await (await admin(request("inbox"), context)).json())[0].status,
   "read",
+);
+const analytics = await (
+  await admin(request("analytics?days=30"), context)
+).json();
+assert.equal(analytics.environment, "preview");
+assert.equal(analytics.days, 30);
+assert.equal(analytics.totals.sessions, 1);
+assert.equal(analytics.totals.pageViews, 2);
+assert.equal(analytics.totals.inquiries, 1);
+assert.equal(analytics.totals.conversionRate, 100);
+assert.equal(analytics.actions.formStarts, 1);
+assert.deepEqual(
+  analytics.topPages.map((page) => [page.path, page.views]),
+  [
+    ["/", 1],
+    ["/services/", 1],
+  ],
+);
+assert.deepEqual(analytics.sources, [{ label: "Google", sessions: 1 }]);
+assert.equal(analytics.privacy.cookies, false);
+assert.equal(analytics.privacy.personalIdentifiers, false);
+assert.ok(!JSON.stringify(analytics).includes(analyticsSession));
+assert.ok(!JSON.stringify(analytics).includes("workflow"));
+console.log(
+  "Passed: first-party sessions, page views, sources, lead actions, conversions, origin checks, bot filtering, and personal-data redaction.",
 );
 assert.equal(
   (

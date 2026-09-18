@@ -1,11 +1,13 @@
 import "./styles/site.css";
 import initializeOpportunity from "./app/lib/opportunity";
 import initializeMotion from "./app/lib/motion";
+import initializeAnalytics from "./app/lib/analytics";
 
 // Every route is already complete HTML. React is used at build time, so this
 // enhancement never replaces the page and the site remains usable without JS.
 initializeMotion();
 initializeOpportunity();
+initializeAnalytics();
 
 // Identity emails may return to the homepage; preserve the token for the admin.
 if (
