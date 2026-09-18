@@ -289,6 +289,8 @@ export default function initializeMotion() {
       'meta[property="og:title"]',
       'meta[property="og:description"]',
       'meta[property="og:url"]',
+      'meta[name="twitter:title"]',
+      'meta[name="twitter:description"]',
       'meta[name="robots"]',
       'link[rel="canonical"]',
       'script[data-site-schema]',

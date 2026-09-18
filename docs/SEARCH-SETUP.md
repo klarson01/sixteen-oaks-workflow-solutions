@@ -5,6 +5,7 @@ The preferred public origin is `https://sixteenoaksllc.com`. Search metadata is 
 ## Implemented on the website
 
 - Each existing public page and published project has one absolute canonical URL and matching `og:url`. Smooth page navigation updates these tags and the JSON-LD together.
+- Facebook, LinkedIn, text-message previews, and X cards use the 1200 × 630 branded image at `/assets/sixteen-oaks-social-share.jpg`. Open Graph and X titles and descriptions follow the current page metadata, including published project pages.
 - Organization, WebSite, WebPage/AboutPage/CollectionPage, and breadcrumb JSON-LD describe the actual business and visible pages. The city/state are public; no street address, business hours, ratings, social profile, or legal registration status is invented. Organization markup does not claim a verified Google Business Profile or promise rich results.
 - `/sitemap.xml` reads current saved production content, includes published projects, and omits drafts, admin, API routes, and preview URLs. It updates without rebuilding. No guessed modification dates are supplied. A storage failure returns 503 instead of a misleading partial sitemap.
 - `/robots.txt` advertises the sitemap. Public uploaded images remain crawlable. The admin sign-in remains crawlable so its existing noindex directive can be discovered; server authorization protects private data.
