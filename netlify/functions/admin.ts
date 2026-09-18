@@ -19,6 +19,7 @@ import {
   RestoreConflict,
   stageRestoreMedia,
 } from "./_shared/backup";
+import { analyticsSummary } from "./_shared/analytics";
 
 export default async function (request: Request, context: Context) {
   try {
@@ -197,6 +198,10 @@ export default async function (request: Request, context: Context) {
           502,
         );
       }
+    }
+    if (path === "analytics" && request.method === "GET") {
+      const days = Number(new URL(request.url).searchParams.get("days") ?? 30);
+      return json(await analyticsSummary(context, days));
     }
     if (path === "inbox" && request.method === "GET") {
       const entries = await store.list({ prefix: "inquiries/" });

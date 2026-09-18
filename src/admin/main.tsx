@@ -23,6 +23,7 @@ import type {
   BackupPayload,
   RestorePreview,
 } from "../content/backup";
+import type { AnalyticsSummary } from "../content/analytics";
 import "./style.css";
 import { invitationFragment } from "./invitation";
 async function api(path: string, method = "GET", data?: unknown) {
@@ -220,6 +221,8 @@ function Admin() {
     [mailDirty, setMailDirty] = useState(false),
     [mail, setMail] = useState<MailForm | null>(null),
     [inbox, setInbox] = useState<Inquiry[]>([]),
+    [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null),
+    [analyticsDays, setAnalyticsDays] = useState<7 | 30 | 90>(30),
     [restore, setRestore] = useState<{
       files: Record<string, Uint8Array>;
       payload: BackupPayload;
@@ -251,6 +254,9 @@ function Admin() {
     } finally {
       setBusy(false);
     }
+  }
+  async function loadAnalytics(days = analyticsDays) {
+    setAnalytics(await api(`analytics?days=${days}`));
   }
   async function finishCallback() {
     const callback = await handleAuthCallback();
@@ -416,6 +422,10 @@ function Admin() {
     });
   }
   const homepage = content ? homepageFor(content) : null;
+  const analyticsMaxViews = Math.max(
+    1,
+    ...(analytics?.daily.map((day) => day.pageViews) ?? []),
+  );
   function patchHomepage(patch: Partial<HomepageContent>) {
     if (content && homepage) edit({ ...content, homepage: { ...homepage, ...patch } });
   }
@@ -635,6 +645,7 @@ function Admin() {
                   ["projects", "Our work"],
                   ["contact", "Contact & email"],
                   ["inbox", "Inbox"],
+                  ["analytics", "Analytics"],
                   ["backup", "Backup & recovery"],
                 ].map(([key, label]) => (
                   <button
@@ -645,6 +656,7 @@ function Admin() {
                       void run(async () => {
                         setTab(key);
                         if (key === "inbox") setInbox(await api("inbox"));
+                        if (key === "analytics") await loadAnalytics();
                       })
                     }
                   >
@@ -1196,6 +1208,187 @@ function Admin() {
                       </details>
                     ))}
                   </section>
+                )}
+                {tab === "analytics" && (
+                  <div className="analytics-dashboard">
+                    <section className="panel analytics-heading">
+                      <div>
+                        <p className="eyebrow">Visitor &amp; lead analytics</p>
+                        <h2>
+                          {preview ? "Preview workspace" : "Live website"}
+                        </h2>
+                        <p className="muted">
+                          Cookie-free, first-party totals. No IP addresses,
+                          user-agent strings, or personal visitor profiles are
+                          stored.
+                        </p>
+                      </div>
+                      <label>
+                        Reporting period
+                        <select
+                          value={analyticsDays}
+                          onChange={(event) => {
+                            const days = Number(event.target.value) as
+                              | 7
+                              | 30
+                              | 90;
+                            setAnalyticsDays(days);
+                            void run(async () => loadAnalytics(days));
+                          }}
+                        >
+                          <option value={7}>Last 7 days</option>
+                          <option value={30}>Last 30 days</option>
+                          <option value={90}>Last 90 days</option>
+                        </select>
+                      </label>
+                    </section>
+                    {!analytics ? (
+                      <section className="panel">
+                        <p>Loading analytics…</p>
+                      </section>
+                    ) : (
+                      <>
+                        <div className="metric-grid">
+                          <section className="metric-card">
+                            <span>Sessions</span>
+                            <strong>
+                              {analytics.totals.sessions.toLocaleString()}
+                            </strong>
+                          </section>
+                          <section className="metric-card">
+                            <span>Page views</span>
+                            <strong>
+                              {analytics.totals.pageViews.toLocaleString()}
+                            </strong>
+                          </section>
+                          <section className="metric-card">
+                            <span>Website inquiries</span>
+                            <strong>
+                              {analytics.totals.inquiries.toLocaleString()}
+                            </strong>
+                          </section>
+                          <section className="metric-card">
+                            <span>Inquiry conversion</span>
+                            <strong>
+                              {analytics.totals.conversionRate.toFixed(1)}%
+                            </strong>
+                          </section>
+                        </div>
+                        <section className="panel">
+                          <div className="toolbar">
+                            <div>
+                              <h2>Daily activity</h2>
+                              <p className="muted">
+                                {analytics.rangeStart} through {analytics.rangeEnd}
+                              </p>
+                            </div>
+                            <button
+                              onClick={() =>
+                                void run(async () => loadAnalytics())
+                              }
+                            >
+                              Refresh
+                            </button>
+                          </div>
+                          <div
+                            className="analytics-chart"
+                            aria-label="Daily page views"
+                          >
+                            {analytics.daily.map((day) => (
+                              <div className="analytics-day" key={day.date}>
+                                <div
+                                  className="analytics-bar"
+                                  style={{
+                                    height: `${Math.max(3, (day.pageViews / analyticsMaxViews) * 100)}%`,
+                                  }}
+                                  title={`${day.date}: ${day.pageViews} page views, ${day.sessions} sessions, ${day.inquiries} inquiries`}
+                                />
+                                <small>
+                                  {new Date(`${day.date}T12:00:00Z`).toLocaleDateString(
+                                    undefined,
+                                    { month: "numeric", day: "numeric" },
+                                  )}
+                                </small>
+                              </div>
+                            ))}
+                          </div>
+                        </section>
+                        <div className="analytics-columns">
+                          <section className="panel">
+                            <h2>Popular pages</h2>
+                            {!analytics.topPages.length ? (
+                              <p>No page views recorded yet.</p>
+                            ) : (
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>Page</th>
+                                    <th>Views</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {analytics.topPages.map((page) => (
+                                    <tr key={page.path}>
+                                      <td>
+                                        <strong>{page.label}</strong>
+                                        <small>{page.path}</small>
+                                      </td>
+                                      <td>{page.views.toLocaleString()}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            )}
+                          </section>
+                          <section className="panel">
+                            <h2>Traffic sources</h2>
+                            {!analytics.sources.length ? (
+                              <p>No referral sources recorded yet.</p>
+                            ) : (
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>Source</th>
+                                    <th>Sessions</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {analytics.sources.map((source) => (
+                                    <tr key={source.label}>
+                                      <td>{source.label}</td>
+                                      <td>{source.sessions.toLocaleString()}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            )}
+                          </section>
+                        </div>
+                        <section className="panel">
+                          <h2>Lead actions</h2>
+                          <dl className="analytics-actions">
+                            <div>
+                              <dt>Contact-form starts</dt>
+                              <dd>{analytics.actions.formStarts}</dd>
+                            </div>
+                            <div>
+                              <dt>Email-link clicks</dt>
+                              <dd>{analytics.actions.emailClicks}</dd>
+                            </div>
+                            <div>
+                              <dt>Phone-link clicks</dt>
+                              <dd>{analytics.actions.phoneClicks}</dd>
+                            </div>
+                          </dl>
+                          <p className="muted">
+                            Website inquiries are counted from successfully
+                            saved Inbox records. Anonymous daily aggregates are
+                            retained for {analytics.privacy.retentionDays} days.
+                          </p>
+                        </section>
+                      </>
+                    )}
+                  </div>
                 )}
                 {tab === "backup" && (
                   <div className="backup-panels">
