@@ -1,6 +1,7 @@
 import { homepageFor, homepageFieldGroups, type HomepageContent } from "../content/homepage";
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
 import {
   login,
   logout,
@@ -17,6 +18,11 @@ import type {
   Inquiry,
   MailSettings,
 } from "../content/model";
+import type {
+  BackupManifest,
+  BackupPayload,
+  RestorePreview,
+} from "../content/backup";
 import "./style.css";
 import { invitationFragment } from "./invitation";
 async function api(path: string, method = "GET", data?: unknown) {
@@ -40,6 +46,36 @@ async function api(path: string, method = "GET", data?: unknown) {
   }
   if (!response.ok) throw new Error(result.message || "The request failed.");
   return result;
+}
+async function rawApi(path: string, method = "GET", body?: BodyInit) {
+  const response = await fetch("/api/admin/" + path, {
+    method,
+    credentials: "same-origin",
+    body,
+  });
+  if (!response.ok) {
+    const raw = await response.text();
+    try {
+      throw new Error(JSON.parse(raw).message || "The request failed.");
+    } catch (error) {
+      if (error instanceof SyntaxError)
+        throw new Error(raw || "The request failed.");
+      throw error;
+    }
+  }
+  return response;
+}
+function jsonFile(value: unknown) {
+  return strToU8(JSON.stringify(value, null, 2));
+}
+function archiveJson(files: Record<string, Uint8Array>, name: string) {
+  const value = files[name];
+  if (!value) throw new Error(`The backup is missing ${name}.`);
+  try {
+    return JSON.parse(strFromU8(value));
+  } catch {
+    throw new Error(`${name} is not valid JSON.`);
+  }
 }
 const blankImage = (): ProjectImage => ({
   src: "",
@@ -184,6 +220,13 @@ function Admin() {
     [mailDirty, setMailDirty] = useState(false),
     [mail, setMail] = useState<MailForm | null>(null),
     [inbox, setInbox] = useState<Inquiry[]>([]),
+    [restore, setRestore] = useState<{
+      files: Record<string, Uint8Array>;
+      payload: BackupPayload;
+      preview: RestorePreview;
+    } | null>(null),
+    [restoreConfirmation, setRestoreConfirmation] = useState(""),
+    [restoreInputKey, setRestoreInputKey] = useState(0),
     [tab, setTab] = useState("homepage"),
     [selected, setSelected] = useState(""),
     [savedIds, setSavedIds] = useState<string[]>([]);
@@ -264,6 +307,99 @@ function Admin() {
         : savedProject?.status === "draft"
         ? `Saved “${savedProject.title}” as a draft. Choose Published and save when it is ready to appear in Our work.`
         : `Saved. Published projects are visible on the ${preview ? "preview" : "live"} Our work page.`,
+    );
+  }
+  async function downloadBackup() {
+    if (dirty || mailDirty)
+      throw new Error("Save or reload your changes before creating a backup.");
+    const payload = (await api("backup")) as BackupPayload;
+    const files: Record<string, Uint8Array> = {
+      "manifest.json": jsonFile(payload.manifest),
+      [payload.manifest.files.content]: jsonFile(payload.content),
+      [payload.manifest.files.mail]: jsonFile(payload.mail),
+      [payload.manifest.files.inquiries]: jsonFile(payload.inquiries),
+    };
+    for (const media of payload.manifest.media) {
+      const response = await rawApi("backup-media/" + media.id);
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      if (bytes.length !== media.size)
+        throw new Error("A backup image changed during download. Try again.");
+      files[media.file] = bytes;
+    }
+    const archive = zipSync(files, { level: 1 });
+    const blob = new Blob([new Uint8Array(archive).buffer], {
+      type: "application/zip",
+    });
+    const link = document.createElement("a");
+    const stamp = payload.manifest.createdAt
+      .replace(/\.\d{3}Z$/, "Z")
+      .replace(/:/g, "-");
+    link.href = URL.createObjectURL(blob);
+    link.download = `sixteen-oaks-backup-${stamp}.zip`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 0);
+    setMessage(
+      `Backup downloaded: ${payload.manifest.counts.projects} projects, ${payload.manifest.counts.inquiries} inquiries, and ${payload.manifest.counts.media} images.`,
+    );
+  }
+  async function prepareRestore(file: File) {
+    if (dirty || mailDirty)
+      throw new Error("Save or reload your changes before reviewing a restore.");
+    if (file.size > 250000000)
+      throw new Error("Choose a backup smaller than 250 MB.");
+    let files: Record<string, Uint8Array>;
+    try {
+      files = unzipSync(new Uint8Array(await file.arrayBuffer()));
+    } catch {
+      throw new Error("Choose a valid Sixteen Oaks ZIP backup.");
+    }
+    const manifest = archiveJson(files, "manifest.json") as BackupManifest;
+    const payload: BackupPayload = {
+      manifest,
+      content: archiveJson(files, "content.json"),
+      mail: archiveJson(files, "mail.json"),
+      inquiries: archiveJson(files, "inquiries.json"),
+    };
+    if (Array.isArray(manifest.media)) {
+      for (const media of manifest.media)
+        if (!files[media.file])
+          throw new Error(`The backup is missing ${media.file}.`);
+    }
+    const preview = (await api(
+      "restore-preview",
+      "POST",
+      payload,
+    )) as RestorePreview;
+    setRestore({ files, payload, preview });
+    setRestoreConfirmation("");
+    setMessage(
+      `Backup validated. Review the ${preview.environment} restore summary before continuing.`,
+    );
+  }
+  async function restoreBackup() {
+    if (!restore) return;
+    for (const media of restore.payload.manifest.media) {
+      const bytes = restore.files[media.file];
+      if (!bytes) throw new Error(`The backup is missing ${media.file}.`);
+      await rawApi(
+        `restore-media/${media.id}?session=${encodeURIComponent(restore.preview.session)}`,
+        "POST",
+        new Uint8Array(bytes).buffer,
+      );
+    }
+    const result = await api("restore-commit", "POST", {
+      session: restore.preview.session,
+      confirmation: restoreConfirmation,
+    });
+    setRestore(null);
+    setRestoreConfirmation("");
+    setRestoreInputKey((value) => value + 1);
+    await load();
+    setTab("backup");
+    setMessage(
+      `Restore complete: ${result.restored.projects} projects, ${result.restored.inquiries} inquiries, and ${result.restored.media} images.`,
     );
   }
   const project = content?.projects.find((p) => p.id === selected);
@@ -499,6 +635,7 @@ function Admin() {
                   ["projects", "Our work"],
                   ["contact", "Contact & email"],
                   ["inbox", "Inbox"],
+                  ["backup", "Backup & recovery"],
                 ].map(([key, label]) => (
                   <button
                     key={key}
@@ -1059,6 +1196,137 @@ function Admin() {
                       </details>
                     ))}
                   </section>
+                )}
+                {tab === "backup" && (
+                  <div className="backup-panels">
+                    <section className="panel">
+                      <p className="eyebrow">Step 1</p>
+                      <h2>Download a complete backup</h2>
+                      <p>
+                        Save a dated ZIP containing website content, projects,
+                        uploaded images, inquiries, and the encrypted email
+                        connection.
+                      </p>
+                      <p className="muted">
+                        The encryption key, administrator accounts, and Netlify
+                        configuration are deliberately excluded. Store this
+                        file securely because it contains customer inquiries.
+                      </p>
+                      <button
+                        className="primary"
+                        disabled={dirty || mailDirty}
+                        onClick={() => void run(downloadBackup)}
+                      >
+                        Download backup
+                      </button>
+                    </section>
+                    <section className="panel">
+                      <p className="eyebrow">Step 2</p>
+                      <h2>Review a backup before restoring</h2>
+                      <p>
+                        Choosing a file does not change the website. The server
+                        validates its contents, images, and encrypted email
+                        connection first.
+                      </p>
+                      <label>
+                        Sixteen Oaks backup ZIP
+                        <input
+                          key={restoreInputKey}
+                          type="file"
+                          accept="application/zip,.zip"
+                          disabled={dirty || mailDirty}
+                          onChange={(event) => {
+                            const file = event.target.files?.[0];
+                            if (file)
+                              void run(async () => prepareRestore(file));
+                          }}
+                        />
+                      </label>
+                      {restore && (
+                        <div className="restore-review">
+                          <h3>Restore summary</h3>
+                          <p
+                            className={
+                              restore.preview.environment === "production"
+                                ? "restore-warning"
+                                : "preview"
+                            }
+                          >
+                            This will replace saved data in the{" "}
+                            {restore.preview.environment === "production"
+                              ? "live website"
+                              : "preview workspace"}
+                            .
+                          </p>
+                          <dl>
+                            <dt>Backup created</dt>
+                            <dd>
+                              {new Date(
+                                restore.preview.backupCreatedAt,
+                              ).toLocaleString()}
+                            </dd>
+                            <dt>Projects</dt>
+                            <dd>
+                              {restore.preview.current.projects} →{" "}
+                              {restore.preview.incoming.projects}
+                            </dd>
+                            <dt>Inquiries</dt>
+                            <dd>
+                              {restore.preview.current.inquiries} →{" "}
+                              {restore.preview.incoming.inquiries}
+                            </dd>
+                            <dt>Uploaded images</dt>
+                            <dd>
+                              {restore.preview.current.media} →{" "}
+                              {restore.preview.incoming.media}
+                            </dd>
+                            <dt>Email connection</dt>
+                            <dd>
+                              {restore.preview.emailConnectionIncluded
+                                ? "Included as encrypted settings"
+                                : "Not included"}
+                            </dd>
+                          </dl>
+                          <label>
+                            Type RESTORE to confirm
+                            <input
+                              value={restoreConfirmation}
+                              autoComplete="off"
+                              onChange={(event) =>
+                                setRestoreConfirmation(event.target.value)
+                              }
+                            />
+                          </label>
+                          <button
+                            className="danger"
+                            disabled={restoreConfirmation !== "RESTORE"}
+                            onClick={() => {
+                              if (
+                                !confirm(
+                                  `Restore this backup to the ${restore.preview.environment === "production" ? "live website" : "preview workspace"}?`,
+                                )
+                              )
+                                return;
+                              void run(restoreBackup);
+                            }}
+                          >
+                            Restore saved data
+                          </button>
+                        </div>
+                      )}
+                    </section>
+                    <section className="panel recovery-notes">
+                      <h2>Separate recovery information</h2>
+                      <p>
+                        Keep the following outside the downloaded ZIP: the
+                        case-sensitive <code>Sixteen_Oaks_Secret_Key</code>,
+                        Netlify administrator access, GitHub access, and
+                        DreamHost DNS access. The encrypted email password can
+                        only be restored while the same secret key remains in
+                        Netlify.
+                      </p>
+                    </section>
+                  </div>
                 )}
               </fieldset>
               {saveControls}
