@@ -11,10 +11,18 @@ import { storeFor, readContent, json } from "./_shared/store";
 import { seal, secretKeyValue } from "./_shared/secrets";
 import { deliver, type StoredMail } from "./_shared/mail";
 import { ensureProductionLaunch } from "./_shared/launch";
+import {
+  backupMedia,
+  commitRestore,
+  createBackup,
+  previewRestore,
+  RestoreConflict,
+  stageRestoreMedia,
+} from "./_shared/backup";
 
 export default async function (request: Request, context: Context) {
   try {
-    await requireAdmin(request);
+    const administrator = await requireAdmin(request);
     await ensureProductionLaunch(context);
     const path = new URL(request.url).pathname.replace(/^\/api\/admin\/?/, "");
     const store = storeFor(context);
@@ -25,6 +33,48 @@ export default async function (request: Request, context: Context) {
         ...(await readContent(context)),
         preview: context.deploy.context !== "production",
       });
+    if (path === "backup" && request.method === "GET")
+      return json(await createBackup(context));
+    if (/^backup-media\/[a-f0-9-]{36}$/.test(path) && request.method === "GET") {
+      const image = await backupMedia(store, path.split("/")[1]);
+      return new Response(image.bytes, {
+        headers: {
+          "Content-Type": image.contentType,
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff",
+        },
+      });
+    }
+    if (path === "restore-preview" && request.method === "POST") {
+      const body = await request.json();
+      return json(
+        await previewRestore(context, administrator.email ?? "", body),
+      );
+    }
+    if (/^restore-media\/[a-f0-9-]{36}$/.test(path) && request.method === "POST") {
+      const bytes = new Uint8Array(await request.arrayBuffer());
+      if (bytes.length > 2000000 || bytes.length < 12)
+        throw new ValidationError("A backup image has an invalid size.");
+      await stageRestoreMedia(
+        context,
+        administrator.email ?? "",
+        new URL(request.url).searchParams.get("session") ?? "",
+        path.split("/")[1],
+        bytes,
+      );
+      return json({ ok: true });
+    }
+    if (path === "restore-commit" && request.method === "POST") {
+      const body = await request.json();
+      return json(
+        await commitRestore(
+          context,
+          administrator.email ?? "",
+          body.session,
+          body.confirmation,
+        ),
+      );
+    }
     if (path === "content" && request.method === "PUT") {
       const body = await request.json();
       const current = await readContent(context);
@@ -212,6 +262,8 @@ export default async function (request: Request, context: Context) {
     return json({ message: "Not found." }, 404);
   } catch (error) {
     if (error instanceof Response) return error;
+    if (error instanceof RestoreConflict)
+      return json({ message: error.message }, 409);
     if (error instanceof ValidationError)
       return json({ message: error.message }, 400);
     console.error("Admin request failed.");
@@ -222,7 +274,12 @@ export default async function (request: Request, context: Context) {
   }
 }
 export const config: Config = {
-  path: ["/api/admin/:resource", "/api/admin/inbox/:id"],
+  path: [
+    "/api/admin/:resource",
+    "/api/admin/inbox/:id",
+    "/api/admin/backup-media/:id",
+    "/api/admin/restore-media/:id",
+  ],
   method: ["GET", "PUT", "POST", "PATCH"],
   rateLimit: { windowLimit: 120, windowSize: 60, aggregateBy: "ip" },
 };

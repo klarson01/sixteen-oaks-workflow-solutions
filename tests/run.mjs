@@ -564,5 +564,6 @@ const openingParagraph = homeHtml.match(/<p\b[^>]*class="hero-description"[^>]*>
 assert.ok(openingParagraph && !openingParagraph.includes("data-hero"), "Opening paragraph is not hidden by entrance animations");
 console.log("Passed: responsive local and uploaded images, original fallback URLs, bounded dimensions, and immediate opening content.");
 
+await import("./backup.mjs");
 await import("./launch.mjs");
 await import("./search.mjs");

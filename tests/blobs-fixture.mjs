@@ -10,6 +10,12 @@ export function getStore({ name }) {
     async getWithMetadata(key) {
       return structuredClone(records.get(key) ?? null);
     },
+    async getMetadata(key) {
+      const value = records.get(key);
+      return value
+        ? structuredClone({ etag: value.etag, metadata: value.metadata })
+        : null;
+    },
     async setJSON(key, data, options = {}) {
       if (
         (options.onlyIfNew && records.has(key)) ||
@@ -21,16 +27,23 @@ export function getStore({ name }) {
       return { modified: true, etag };
     },
     async set(key, data, options = {}) {
-      if (options.onlyIfNew && records.has(key)) return { modified: false };
+      if (
+        (options.onlyIfNew && records.has(key)) ||
+        (options.onlyIfMatch && records.get(key)?.etag !== options.onlyIfMatch)
+      )
+        return { modified: false };
       const etag = String(++version);
       records.set(key, { data, metadata: options.metadata, etag });
       return { modified: true, etag };
+    },
+    async delete(key) {
+      records.delete(key);
     },
     async list({ prefix }) {
       return {
         blobs: [...records.keys()]
           .filter((key) => key.startsWith(prefix))
-          .map((key) => ({ key })),
+          .map((key) => ({ key, etag: records.get(key).etag })),
       };
     },
   };

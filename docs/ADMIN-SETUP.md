@@ -32,6 +32,12 @@ Up to 100 projects are supported. Images must be JPG, PNG, or WebP under 2 MB. R
 - **Inbox** stores incoming messages and their notification status. Mark entries New, Read, or Archived, and use their email link to reply.
 - Website content and SMTP settings have separate save buttons. Unsaved changes prompt before leaving. Save conflicts prevent an older session from overwriting a newer saved version; reload before continuing.
 
+## Backup and recovery
+
+The private **Backup & recovery** section downloads a versioned ZIP containing saved website content, projects, all uploaded media, inquiries, and encrypted mail settings. Restore first validates the archive and shows before/after counts. It requires the administrator to type `RESTORE`, stages and verifies every image, and refuses to continue if saved data changed after the review.
+
+The ZIP never contains the Netlify encryption key, administrator accounts, environment variables, or DNS configuration. Keep the existing case-sensitive `Sixteen_Oaks_Secret_Key` value in an approved password manager; the SMTP ciphertext in a backup is usable only with that same key. Because the archive contains inquiries, store it privately and never commit it to GitHub. See [Backup and recovery](BACKUP-RECOVERY.md) for the operating procedure and full-site recovery order.
+
 ## Preview and production
 
 Production uses `sixteen-oaks-live`, which persists across production deployments. Deploy previews share a stable review store, `sixteen-oaks-preview-6aa56e2f692ceb00088cc1fc`, and display a clear preview banner. This preserves the workspace where project entry began; the identifier is not a credential. Preview edits, uploaded images, email connection, and test inquiries do not affect production. A new preview deployment preserves saved projects, images, settings, and inquiries. Other branch deployments remain isolated by deploy ID. The September 16, 2026 launch copies the reviewed preview content, referenced uploaded images, and encrypted mail connection once into an empty production workspace. It copies media bytes into the live store so the same relative image addresses resolve there. Draft projects stay private. Test inquiries, request counters, and form-signing keys are excluded. Production and preview remain separate after this initial transfer; future preview edits do not change the live website.
@@ -42,13 +48,13 @@ The existing Ray's example is the seed content for a workspace that has not been
 
 - `src/content/`: data model, seed, and server validation.
 - `src/admin/`: private React UI using `@netlify/identity`.
-- `netlify/functions/admin.ts`: authenticated content, mail, upload, and inbox API.
+- `netlify/functions/admin.ts`: authenticated content, mail, upload, inbox, backup, and restore API.
 - `site.ts`: complete server-rendered public HTML with current content.
 - `inquiries.ts`: rate-limited, signed, idempotent submissions that save before sending.
 - `media.ts`: uploaded public images; only administrators can upload.
 - `.build/template.html`: generated Vite HTML shell included in the site function.
 
-`npm test` checks access controls, origin checks, draft visibility, persistence and conflicting saves, input validation, credential encryption/redaction, form-token validation, duplicate submissions, and preview isolation using an in-memory storage fixture. `npm run build` checks types, public pages, assets, navigation, and unchanged OrbitDesk files. These tests do not prove the real Identity account or SMTP provider works: verify login and send a delivery test after activation.
+`npm test` checks access controls, origin checks, draft visibility, persistence and conflicting saves, input validation, credential encryption/redaction, form-token validation, duplicate submissions, preview isolation, and a complete isolated backup/restore cycle using an in-memory storage fixture. `npm run build` checks types, public pages, assets, navigation, and unchanged OrbitDesk files. These tests do not prove the real Identity account or SMTP provider works: verify login and send a delivery test after activation.
 
 `npm run dev` previews public templates and the admin shell. Use a Netlify deployment for Identity, Blobs, and end-to-end form testing. `npm run preview` serves static build output; its forms do not have runtime signing tokens.
 
