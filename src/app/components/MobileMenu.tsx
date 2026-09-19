@@ -20,6 +20,7 @@ export default function MobileMenu({ path }: { path: PagePath }) {
       <Navigation path={path} mobile />
       <div className="menu-footer">
         <a href="/#contact">Start a conversation</a>
+        <a href="/privacy/">Privacy</a>
         <p>Rooted in Wisconsin. Built around you.</p>
       </div>
     </dialog>

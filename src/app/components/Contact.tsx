@@ -112,7 +112,8 @@ export default function Contact() {
           </button>
           <p className="form-status" role="status" aria-live="polite" />
           <p className="form-privacy">
-            We’ll use these details to respond to your inquiry.
+            We’ll use these details to respond to your inquiry. See our{" "}
+            <a href="/privacy/">Privacy Policy</a>.
           </p>
         </form>
       </div>
