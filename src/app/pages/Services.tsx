@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import Contact from "../components/Contact";
+import { serviceFaqs } from "../../content/faq";
 
 export default function Services() {
   return (
@@ -133,6 +134,37 @@ export default function Services() {
               </svg>
             </a>
           </div>
+          <section
+            className="service-faq"
+            aria-labelledby="service-faq-title"
+          >
+            <div className="service-faq-heading" data-reveal="">
+              <div>
+                <p className="eyebrow">Common questions</p>
+                <h2 id="service-faq-title">
+                  A few helpful
+                  <br />
+                  <em>answers.</em>
+                </h2>
+              </div>
+              <p>
+                You don’t need to arrive with a technical plan. Start with what
+                you want to make clearer, easier, or more useful.
+              </p>
+            </div>
+            <div className="service-faq-grid">
+              {serviceFaqs.map((item) => (
+                <article
+                  className="service-faq-item"
+                  data-reveal=""
+                  key={item.question}
+                >
+                  <h3>{item.question}</h3>
+                  <p>{item.answer}</p>
+                </article>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
       <Contact />

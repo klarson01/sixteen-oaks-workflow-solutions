@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { renderDocument } from "../scripts/render-document.mjs";
 const { render } = await import("../.build/tests/src/entry-server.js");
 const { searchPaths, sitemapXml, SITE_ORIGIN } = await import("../.build/tests/src/content/search.js");
+const { serviceFaqs } = await import("../.build/tests/src/content/faq.js");
 const { default: search } = await import("../.build/tests/netlify/functions/search.js");
 const { default: site } = await import("../.build/tests/netlify/functions/site.js");
 const { storeFor } = await import("../.build/tests/netlify/functions/_shared/store.js");
@@ -24,6 +25,29 @@ assert.ok(!schemaText.includes(content.settings.notificationEmail), "Private not
 assert.ok(!schemaText.includes("PRIVATE DRAFT"));
 assert.equal(schema["@graph"].find(node => node["@type"] === "WebPage").name, page.title);
 assert.equal(schema["@graph"].find(node => node["@type"] === "Organization").email, content.settings.publicEmail);
+const organization = schema["@graph"].find(node => node["@type"] === "Organization" && node["@id"]?.endsWith("#organization"));
+assert.equal(organization.founder.name, "Kevin Larson");
+assert.deepEqual(organization.areaServed.map(area => area.name), ["Wisconsin", "Northern Illinois"]);
+assert.equal(organization.contactPoint.email, content.settings.publicEmail);
+assert.ok(schema["@graph"].some(node => node["@type"] === "OfferCatalog"));
+assert.equal(schema["@graph"].filter(node => node["@type"] === "Service").length, 3);
+const projectEntity = schema["@graph"].find(node => node["@type"] === "CreativeWork");
+assert.equal(projectEntity.name, content.projects[0].title);
+assert.equal(projectEntity.creator["@id"], SITE_ORIGIN + "/#organization");
+assert.equal(projectEntity.about.name, content.projects[0].title);
+assert.equal(projectEntity.about.description, content.projects[0].business);
+const servicesPage = render("/services/", content);
+const servicesHtml = renderDocument(template, servicesPage);
+const servicesSchemaText = servicesHtml.match(/<script type="application\/ld\+json" data-site-schema="">([\s\S]*?)<\/script>/)[1];
+const servicesSchema = JSON.parse(servicesSchemaText);
+const faqEntity = servicesSchema["@graph"].find(node => node["@type"] === "FAQPage");
+assert.equal(faqEntity.mainEntity.length, serviceFaqs.length);
+for (const [index, item] of serviceFaqs.entries()) {
+  assert.equal(faqEntity.mainEntity[index].name, item.question);
+  assert.equal(faqEntity.mainEntity[index].acceptedAnswer.text, item.answer);
+  assert.ok(servicesHtml.includes(item.question), "FAQ question is visible on the Services page");
+  assert.ok(servicesHtml.includes(item.answer), "FAQ answer is visible on the Services page");
+}
 assert.match(html, /<meta name="robots" content="index, follow">/);
 assert.equal((html.match(/rel="canonical"/g) ?? []).length, 1);
 assert.match(html, /<meta property="og:url" content="https:\/\/sixteenoaksllc\.com\/work\/rays-mobile-repair\/">/);
@@ -60,6 +84,8 @@ await store.setJSON("content", content);
 assert.ok(!(await (await search(request("/sitemap.xml"), context)).text()).includes("/work/private-project/"));
 const robots = await (await search(request("/robots.txt"), context)).text();
 assert.ok(robots.includes("Sitemap: " + SITE_ORIGIN + "/sitemap.xml"));
+assert.ok(robots.includes("User-agent: OAI-SearchBot\nAllow: /"), "ChatGPT search crawler is explicitly allowed");
+assert.ok(robots.includes("User-agent: GPTBot\nAllow: /"), "Existing model-training crawler access remains allowed");
 assert.ok(!robots.includes("Disallow: /admin") && !robots.includes("Disallow: /api/\n"), "Allow admin noindex discovery and public uploaded images");
 const preview = { ...context, deploy: { context: "deploy-preview", id: "preview-search" } };
 for (const path of ["/robots.txt", "/sitemap.xml"]) {
