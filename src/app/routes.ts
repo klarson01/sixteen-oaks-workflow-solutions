@@ -9,7 +9,7 @@ export const routes = {
     label: "Services",
     title: "Our Services | Sixteen Oaks Workflow Solutions",
     description:
-      "Custom websites, practical AI and automation, and business workflows designed around the way you work.",
+      "Custom websites, practical AI and automation, and business workflows for small businesses in southern Wisconsin and Northern Illinois.",
   },
   "/work/": {
     label: "Our work",

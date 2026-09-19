@@ -8,6 +8,7 @@ await build({
   entryPoints: [
     "src/admin/invitation.ts",
     "src/content/homepage.ts",
+    "src/content/faq.ts",
     "src/app/lib/images.ts",
     "src/content/search.ts",
     "netlify/functions/search.ts",
