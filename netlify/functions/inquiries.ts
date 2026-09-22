@@ -5,6 +5,7 @@ import { storeFor, readContent, json } from "./_shared/store";
 import { formKey } from "./_shared/form-key";
 import { verifyFormToken } from "./_shared/secrets";
 import { deliver } from "./_shared/mail";
+import { forwardInquiryToIronwood } from "./_shared/ironwood";
 export default async function (request: Request, context: Context) {
   const wantsJson = request.headers.get("accept")?.includes("application/json");
   function response(message: string, status: number, id?: string) {
@@ -62,6 +63,16 @@ export default async function (request: Request, context: Context) {
       onlyIfNew: true,
     });
     if (result.modified) {
+      const intakeForward = forwardInquiryToIronwood(inquiry).catch((error) => {
+        console.error(
+          error instanceof Error
+            ? error.message
+            : "Ironwood intake forwarding failed.",
+        );
+      });
+      if (typeof context.waitUntil === "function")
+        context.waitUntil(intakeForward);
+      else await intakeForward;
       try {
         const { content } = await readContent(context);
         try {

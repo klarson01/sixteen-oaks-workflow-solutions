@@ -74,3 +74,14 @@ The design was approved in the [Sixteen Oaks private preview](https://sixteen-oa
 Ray’s screenshot was captured from its public website on September 11, 2026. The oak landscape is an illustrative generated image. Font licenses are in public/assets/licenses/.
 
 This repository is the source for future website development. Do not maintain a second independently edited website copy.
+
+## Ironwood intake
+
+Website inquiries can also be forwarded to an isolated Ironwood connection
+without changing the existing inquiry storage or email notifications:
+
+- `IRONWOOD_INTAKE_URL` — the full Ironwood `/api/lead-intake` endpoint
+- `IRONWOOD_INTAKE_KEY` — the private API key for the `Sixteen Oaks` connection
+
+Both values are function-only runtime configuration and must never be exposed
+through Vite/client environment variables.
