@@ -3,6 +3,7 @@ import Navigation from "./Navigation";
 import type { PagePath } from "../routes";
 
 export default function SiteHeader({ path }: { path: PagePath }) {
+  const contactPath = path === "/404/" || path === "/privacy/" ? "/" : path;
   return (
     <header className="site-header">
       <div className="container header-inner">
@@ -10,7 +11,7 @@ export default function SiteHeader({ path }: { path: PagePath }) {
         <Navigation path={path} />
         <a
           className="header-cta"
-          href={`${path === "/404/" ? "/" : path}#contact`}
+          href={`${contactPath}#contact`}
         >
           Let’s talk
           <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true">
