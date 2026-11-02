@@ -11,6 +11,11 @@ export const routes = {
     description:
       "Custom websites, practical AI and automation, and business workflows for small businesses in southern Wisconsin and Northern Illinois.",
   },
+  "/real-estate-intelligence/": {
+    label: "Real Estate Intelligence",
+    title: "Real Estate Intelligence | Sixteen Oaks Workflow Solutions",
+    description: "Explore Sixteen Oaks buyer, seller, rental, multifamily and commercial analyzers. Clear visuals, editable assumptions and a free early-access pilot.",
+  },
   "/work/": {
     label: "Our work",
     title: "Our Work | Sixteen Oaks Workflow Solutions",

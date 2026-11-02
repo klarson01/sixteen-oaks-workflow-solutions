@@ -57,6 +57,8 @@ export const config: Config = {
     "/work/*",
     "/approach",
     "/approach/",
+    "/real-estate-intelligence",
+    "/real-estate-intelligence/",
   ],
   // HEAD is handled alongside GET above; other methods return 405.
 };

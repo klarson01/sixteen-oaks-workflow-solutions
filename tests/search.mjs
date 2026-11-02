@@ -36,6 +36,15 @@ assert.equal(projectEntity.name, content.projects[0].title);
 assert.equal(projectEntity.creator["@id"], SITE_ORIGIN + "/#organization");
 assert.equal(projectEntity.about.name, content.projects[0].title);
 assert.equal(projectEntity.about.description, content.projects[0].business);
+const intelligence = render("/real-estate-intelligence/", content, "test-form-token");
+assert.equal(intelligence.notFound, false);
+assert.equal(intelligence.canonicalUrl, SITE_ORIGIN + "/real-estate-intelligence/");
+for (const title of ["Buyer Analyzer", "Seller Analyzer", "Multifamily Analyzer", "Rental Analyzer", "Commercial Analyzer", "Acquisition Intelligence Engine"])
+  assert.ok(intelligence.html.includes(title), "All analyzer summaries render without JavaScript");
+assert.ok(intelligence.html.includes("free 14-day trial"));
+assert.ok(intelligence.html.includes('<option selected="">Real Estate Intelligence / early access</option>'));
+assert.ok(!intelligence.html.includes("chatgpt.site"), "Owner-private prototype links are not offered to public visitors");
+assert.ok(searchPaths(content).includes("/real-estate-intelligence/"));
 const servicesPage = render("/services/", content);
 const servicesHtml = renderDocument(template, servicesPage);
 const servicesSchemaText = servicesHtml.match(/<script type="application\/ld\+json" data-site-schema="">([\s\S]*?)<\/script>/)[1];
