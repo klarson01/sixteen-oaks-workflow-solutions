@@ -10,7 +10,7 @@ import type { Inquiry } from "../../../src/content/model";
 import { formKey } from "./form-key";
 import { storeFor } from "./store";
 
-const PUBLIC_PATH = /^\/(?:$|services\/$|work\/$|approach\/$|work\/[a-z0-9]+(?:-[a-z0-9]+)*\/$)/;
+const PUBLIC_PATH = /^\/(?:$|services\/$|real-estate-intelligence\/$|work\/$|approach\/$|work\/[a-z0-9]+(?:-[a-z0-9]+)*\/$)/;
 const SESSION = /^[a-f0-9-]{36}$/i;
 const DAY_KEY = "analytics/daily/";
 const chicagoDate = new Intl.DateTimeFormat("en-CA", {
@@ -110,6 +110,7 @@ function pageLabel(path: string) {
   const known: Record<string, string> = {
     "/": "Home",
     "/services/": "Services",
+    "/real-estate-intelligence/": "Real Estate Intelligence",
     "/work/": "Our work",
     "/approach/": "About",
   };

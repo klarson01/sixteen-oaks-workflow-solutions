@@ -1,5 +1,5 @@
 import { useSite } from "../../content/context";
-export default function Contact() {
+export default function Contact({ earlyAccess = false }: { earlyAccess?: boolean }) {
   const {
     content: { settings },
     formToken,
@@ -18,7 +18,7 @@ export default function Contact() {
             <em>better day look like?</em>
           </h2>
           <p className="contact-lead">
-            Tell us about your business and what you’d like to make possible.
+            {earlyAccess ? "Tell us which analyzers you’d like to try and how you plan to use them." : "Tell us about your business and what you’d like to make possible."}
           </p>
           <div className="contact-details">
             <a href={`mailto:${settings.publicEmail}`}>
@@ -89,15 +89,16 @@ export default function Contact() {
           </div>
           <label htmlFor="contact-service">
             What can we help with?
-            <select id="contact-service" name="service">
+            <select id="contact-service" name="service" defaultValue={earlyAccess ? "Real Estate Intelligence / early access" : "Let’s explore"}>
               <option>Let’s explore</option>
               <option>Website</option>
               <option>AI &amp; automation</option>
               <option>Custom application</option>
+              <option>Real Estate Intelligence / early access</option>
             </select>
           </label>
           <label htmlFor="contact-message">
-            Tell us a little about your project
+            {earlyAccess ? "Which analyzers would you like to try?" : "Tell us a little about your project"}
             <textarea
               id="contact-message"
               name="message"
@@ -108,7 +109,7 @@ export default function Contact() {
             />
           </label>
           <button className="button" type="submit">
-            Send your message <span aria-hidden="true">→</span>
+            {earlyAccess ? "Request early access" : "Send your message"} <span aria-hidden="true">→</span>
           </button>
           <p className="form-status" role="status" aria-live="polite" />
           <p className="form-privacy">

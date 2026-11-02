@@ -23,6 +23,7 @@ npm run preview
 | URL        | Page                              |
 | ---------- | --------------------------------- |
 | /          | Home and featured project         |
+| /real-estate-intelligence/ | Analyzer previews and free early-access requests |
 | /services/ | Services                          |
 | /work/     | Published project gallery        |
 | /work/:slug/ | Individual project case study |
@@ -85,3 +86,9 @@ without changing the existing inquiry storage or email notifications:
 
 Both values are function-only runtime configuration and must never be exposed
 through Vite/client environment variables.
+
+## Real Estate Intelligence
+
+The `/real-estate-intelligence/` marketing page introduces five property analyzers and the separate business Acquisition Intelligence Engine. Screenshots use fictional sample data from the existing prototypes. The page uses the shared inquiry form, with early access preselected, and participates in public navigation, server rendering, search, sitemap, and analytics.
+
+The free pilot is access by request. Analyzer applications remain separate from this marketing repository. Current prototype saving is browser-local; accounts, online saving, agency branding, and billing are not connected here. A free 14-day trial is planned for subscription launch; pricing and tiers remain undecided.
