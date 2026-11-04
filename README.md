@@ -23,7 +23,7 @@ npm run preview
 | URL        | Page                              |
 | ---------- | --------------------------------- |
 | /          | Home and featured project         |
-| /real-estate-intelligence/ | Analyzer previews and free early-access requests |
+| /real-estate-intelligence/ | Analyzers, AI document reviews and workspace access |
 | /services/ | Services                          |
 | /work/     | Published project gallery        |
 | /work/:slug/ | Individual project case study |
@@ -89,6 +89,8 @@ through Vite/client environment variables.
 
 ## Real Estate Intelligence
 
-The `/real-estate-intelligence/` marketing page introduces five property analyzers and the separate business Acquisition Intelligence Engine. Screenshots use fictional sample data from the existing prototypes. The page uses the shared inquiry form, with early access preselected, and participates in public navigation, server rendering, search, sitemap, and analytics.
+The `/real-estate-intelligence/` marketing page links Buyer and Seller Analyzers, RECR Review and Inspection Report Review to the existing standalone workspace at https://sixteen-oaks-seller-dev.netlify.app/. Each available tool preserves its `?next=` sign-in destination. RECR and Inspection summaries describe separate buyer/internal agent outputs, agency branding, source verification and the shared three-attempt AI pilot allowance. The workspace requires a signed-in account and active access for new reviews; the 14-day trial begins when the account holder starts it. No subscription payments are enabled and pricing/tiers remain undecided.
 
-The free pilot is access by request. Analyzer applications remain separate from this marketing repository. Current prototype saving is browser-local; accounts, online saving, agency branding, and billing are not connected here. A free 14-day trial is planned for subscription launch; pricing and tiers remain undecided.
+RECR accepts one complete PDF up to 20 pages and 8 MB. Inspection accepts up to six PDFs, 60 combined pages and 20 MB combined. Opening/exporting saved results uses no new AI attempt; provider-submitted failed attempts count toward the pilot allowance. These are current app limits, not subscription tiers or a guarantee of report accuracy.
+
+Multifamily, Rental, Commercial and the separate business Acquisition Intelligence Engine remain early-access previews. Their screenshots use fictional sample data. The shared inquiry form, navigation, server rendering, search metadata, sitemap and analytics remain in this marketing repository. Analyzer and skill source, Supabase configuration, uploaded documents, account data and AI credentials remain in the separate application project.

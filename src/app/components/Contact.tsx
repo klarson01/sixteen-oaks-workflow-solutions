@@ -18,7 +18,7 @@ export default function Contact({ earlyAccess = false }: { earlyAccess?: boolean
             <em>better day look like?</em>
           </h2>
           <p className="contact-lead">
-            {earlyAccess ? "Tell us which analyzers you’d like to try and how you plan to use them." : "Tell us about your business and what you’d like to make possible."}
+            {earlyAccess ? "Tell us which analyzers or document reviews you’d like to try and how you plan to use them." : "Tell us about your business and what you’d like to make possible."}
           </p>
           <div className="contact-details">
             <a href={`mailto:${settings.publicEmail}`}>
