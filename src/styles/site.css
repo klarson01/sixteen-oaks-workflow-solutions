@@ -2579,3 +2579,7 @@ body:has(.mainstreet-home) .header-cta { background: var(--copper); border-color
 /* Available document reviews share the existing Real Estate Intelligence card layout. */
 .rei-reviews{border-top:1px solid var(--line);scroll-margin-top:100px}.rei-review-card{border-top:3px solid var(--copper)}.rei-review-heading{display:flex;justify-content:space-between;gap:24px;align-items:start}.rei-review-number{font-size:2.2rem;line-height:1;color:var(--copper-light);opacity:.65}.rei-review-card .rei-review-limits{font-size:.76rem;color:var(--muted);margin:0 0 24px}.rei-review-note{border-left:2px solid var(--copper);padding:3px 0 3px 24px;margin-top:32px;max-width:950px}.rei-review-note p{color:var(--muted);font-size:.88rem}.rei-review-note p+p{margin-top:12px}.rei-review-note strong{color:var(--white)}
 @media(max-width:600px){.rei-jump{flex-wrap:wrap}.rei-jump a{flex:1 1 45%}.rei-jump a:nth-child(2){border-right:0}.rei-jump a:nth-child(3){padding-left:0}.rei-jump a:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* Real Estate Intelligence keeps its original Midnight Brass identity. */
+body:has(.intelligence-page){--ink:#070806;--ink-light:#10130f;--paper:#f0e9dc;--white:#f0e9dc;--copper:#b78a43;--copper-light:#dcb774;--copper-soft:#b78a43;--warm-rule:rgba(220,183,116,.22);--muted:#b0b4a7;--line:#30392f;background:var(--ink)}
+.intelligence-page .rei-tool figure{background:#10130f}.intelligence-page .rei-business img{border-color:#30392f}.intelligence-page .rei-feature-preview{background:#070806}
