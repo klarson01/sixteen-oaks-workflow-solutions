@@ -14,7 +14,7 @@ export const routes = {
   "/real-estate-intelligence/": {
     label: "Real Estate Intelligence",
     title: "Real Estate Intelligence | Sixteen Oaks Workflow Solutions",
-    description: "Buyer and Seller Analyzers, Wisconsin RECR and Inspection Report Review. One private workspace, agency-branded reports and a free 14-day trial with limited AI review attempts.",
+    description: "Buyer, Seller and Multifamily Analyzers, Wisconsin RECR and Inspection Report Review. One private workspace, agency-branded reports and a free 14-day trial with limited AI review attempts.",
   },
   "/work/": {
     label: "Our work",
