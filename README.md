@@ -96,3 +96,5 @@ RECR accepts one complete PDF up to 20 pages and 8 MB. Inspection accepts up to 
 Rental, Commercial and Acquisition Intelligence are connected to the shared workspace. All screenshots use fictional sample data. The shared inquiry form, navigation, server rendering, search metadata, sitemap and analytics remain in this marketing repository. Analyzer and skill source, Supabase configuration, uploaded documents, account data and AI credentials remain in the separate application project.
 
 Real Estate Intelligence uses its original obsidian/charcoal and brass palette, scoped to that route. The remaining marketing website retains its approved teal/copper identity.
+
+Appraisal Review joins the same shared pilot allowance. It accepts a complete appraisal PDF plus optional CMA PDF/Word (20 MB combined, up to 60 PDF pages) and produces separate client/internal reports plus a three-part internal Word packet. Printed credentials are not externally verified. No new paid subscription or pilot quota reset is introduced.
