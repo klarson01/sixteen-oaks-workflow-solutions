@@ -7,7 +7,7 @@ PR: https://github.com/klarson01/sixteen-oaks-workflow-solutions/pull/20
 Branch: feat/intelligence-workspace-launch
 Source commit before this handoff: 37fcba6bd29282aaab899922d707617d88383f0d
 Environment: corporate production rollout; existing Intelligence pilot on Aethralion DEV
-Deployment status: marketing preview verified; branded workspace cutover pending DNS/TLS
+Deployment status: branded workspace HTTPS verified; corporate marketing publication ready
 
 ## Objective
 Launch the existing workspace at https://intelligence.sixteenoaksllc.com/ and connect the corporate marketing page to its complete six-analyzer and seven-workflow suite. Kevin authorized the launch and chose this hostname. Preserve independent deployment, accounts, private work, and usage.
@@ -18,21 +18,21 @@ Existing workspace Netlify site 0c473315-058d-43b7-8fb0-f462628e065f, name sixte
 ## Changes made
 Corporate RealEstate.tsx now lists every analyzer/workflow, uses the branded hostname, and describes the shared initial three-attempt allowance. routes.ts metadata and infrastructure inventory updated. No homepage redesign or admin content changes.
 
-Workspace source commit 67dfa47c33bc97bae5d5e2ba0ee1241075166288 adds exact canonical/legacy origin support, callback compatibility and canonical report links. Private Sites preview succeeded. Public release intelligence-domain-launch-v1 deployed to existing Netlify site as 6aedf3c93856a49546cfc3ca. Gateway v7 and seven workflow endpoints updated; admin email endpoint must wait for valid HTTPS before switching its email destination.
+Workspace source commit 1a7d1768e7ec170ea4c799328ca1a3cc6fa4c055 adds exact canonical/legacy origin support, callback compatibility and canonical report links. Private Sites preview succeeded. Public release intelligence-domain-launch-v1 deployed to existing Netlify site as 6aedf49b179a5304d6b99d23. Gateway v7 and seven workflow endpoints updated. Once HTTPS was verified, admin endpoint v3 was deployed with canonical invitation/reset return links; no email was sent.
 
-Supabase exact canonical redirects added for root and seller/buyer/multifamily/rental/commercial/acquisition; all previous redirects and Aethralion Site URL retained. Netlify domain assigned to existing workspace site. DreamHost dashboard confirms active nameservers ns1/ns2/ns3.dreamhost.com. Added only intelligence CNAME -> sixteen-oaks-seller-dev.netlify.app; record submitted successfully. Parent DNS/mail unchanged. DNS propagation and certificate are pending; marketing PR remains draft until canonical origin works.
+Supabase exact canonical redirects added for root and seller/buyer/multifamily/rental/commercial/acquisition; all previous redirects and Aethralion Site URL retained. Netlify domain assigned to existing workspace site. DreamHost dashboard confirms active nameservers ns1/ns2/ns3.dreamhost.com. Added only intelligence CNAME -> sixteen-oaks-seller-dev.netlify.app; record submitted successfully. Parent DNS/mail unchanged. DNS propagation completed and Netlify reports HTTPS enabled with a Let's Encrypt certificate. The canonical workspace loads successfully over HTTPS and protected Seller access redirects signed-out visitors to its login portal.
 
 ## Tests and verification
-75 suite tests passed, including both exact approved origins, rejected lookalikes, verified authorization and gateway session controls. Production workspace build succeeded. Corporate required Website checks passed on original PR head (npm ci, npm test, npm run build); rerun after this documentation commit. Netlify preview https://deploy-preview-20--sixteenoaks.netlify.app/real-estate-intelligence/ reviewed with all six analyzer and seven workflow destinations.
+75 suite tests passed, including both exact approved origins, rejected lookalikes, verified authorization and gateway session controls. Production workspace build succeeded. Corporate required Website checks passed on a65c9d201f55d3cf0a692b9548173ebb1762550d (npm ci, npm test, npm run build); rerun after this documentation update. Netlify preview https://deploy-preview-20--sixteenoaks.netlify.app/real-estate-intelligence/ reviewed with all six analyzer and seven workflow destinations.
 
 ## Shared-service / ecosystem effect
 No shared runtime, HelmOrbit dependency, new auth system, billing or database project. Existing account isolation, usage ledgers and global/concurrent AI controls retained. Legacy workspace hostname remains enabled during transition. Infrastructure inventory explicitly distinguishes this pilot from a backend production migration.
 
 ## Decisions and open issues
-Await propagation and valid Netlify HTTPS. Do not publish main-site links until canonical workspace, gateway and login are checked. No real invitations, password-reset messages or paid AI requests were sent. Actual usage balances and access dates were not adjusted by this launch.
+DNS/TLS blocker resolved. The branded sign-in page and signed-out protected-route redirect are verified. An authenticated owner session on the new hostname has not been manually tested; no password was requested during link correction. No real invitations, password-reset messages or paid AI requests were sent. Actual usage balances and access dates were not adjusted by this launch.
 
 ## Next assistant: exact next steps
-Verify Netlify DNS/certificate; check canonical release and sign-in. Deploy prepared sixteen-oaks-admin function (same canonical/legacy origin list, canonical email return root) only when HTTPS works. Verify unauthorized access denial and owner administration without modifying balances. Confirm latest corporate CI/preview, mark PR20 ready and merge under existing launch authorization; verify production marketing links. Update handoff with observed final results. Do not merge stale draft PR17.
+Confirm latest corporate CI/preview, mark PR20 ready and merge under existing launch authorization; verify production marketing Sign In and trial/tool links point to the canonical workspace root rather than the development hostname or owner admin route. Kevin can sign in with his existing account; owner administration remains permission-gated and separate. Do not modify balances or send real emails while verifying. Do not merge stale draft PR17.
 
 ## Secrets and privacy
 No secrets, OAuth tokens or private document payloads included. Public build includes only the publishable Supabase key. Privileged credentials remain server-side.
