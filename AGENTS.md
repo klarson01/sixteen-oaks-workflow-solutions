@@ -6,6 +6,7 @@ Before changing product messaging, integrations, identity, AI services, or share
 - [Technology Ecosystem Blueprint](docs/architecture/ECOSYSTEM-BLUEPRINT.md)
 - [Infrastructure Inventory](docs/architecture/INFRASTRUCTURE-INVENTORY.md)
 - [Ecosystem Development Rules](docs/architecture/DEVELOPMENT-RULES.md)
+- [AI Collaboration Protocol](docs/architecture/AI-COLLABORATION.md): ChatGPT/Claude GitHub coordination and handoffs.
 
 Sixteen Oaks is the parent cross-industry business; Aethralion is specialized for real estate. Keep Ironwood, Canopy Forge, Real Estate Intelligence, and customer deployments independently owned. This website repo contains governance references only; it is not authorization to move another product's code, data, credentials or deployment here. Update inventory and ADRs as ownership and integrations change.
 
