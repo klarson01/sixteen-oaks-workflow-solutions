@@ -20,7 +20,7 @@ Source: read-only inspection of connected GitHub, Netlify and Supabase resources
 | Project | URL | Platform | Action |
 |---|---|---|---|
 | sixteenoaks | https://sixteenoaksllc.com | Sixteen Oaks site | KEEP |
-| sixteen-oaks-seller-dev | https://sixteen-oaks-seller-dev.netlify.app | Real Estate Intelligence DEV | KEEP, determine Git origin and production plan |
+| sixteen-oaks-seller-dev | https://intelligence.sixteenoaksllc.com | Real Estate Intelligence branded pilot workspace | KEEP independent; canonical Sites Git project appgprj_6ae8a99b9c648191a606a253f468a0c1; legacy netlify.app hostname retained during cutover |
 | snazzy-sprinkles-c22714 | https://aethralion.com | Aethralion | KEEP, clarify project naming |
 | sixteen-oaks-lead-platform-dev | https://ironwood.sixteenoaksllc.com | Ironwood | Clarify live/DEV conventions |
 | ironwood-archive-pilot | https://ironwood-archive-pilot.netlify.app | Ironwood Archive | KEEP isolated pilot |
@@ -77,3 +77,7 @@ Nine active `sixteen-oaks-*` Edge Functions were discovered in Aethralion DEV: g
 7. Where will a future architecture control plane be hosted and which products actually need it?
 
 **No production resources should be merged, deleted, moved or renamed as an automatic consequence of this inventory.**
+
+## 2026-11-06 Real Estate Intelligence launch clarification
+
+Kevin selected `intelligence.sixteenoaksllc.com` for the existing standalone workspace. This is a branded hostname and marketing-link integration, not a code or database merger. The workspace retains its canonical Sites Git repository, existing Netlify site and existing Aethralion DEV project `cdomxmdflahwhmcmruvo`; its backend is not being relabeled or migrated to Aethralion PROD. Existing identities, private records, trial/access metadata and immutable usage ledger are preserved. Owner-adjustable AI ceilings are independent of dated access. The corporate repository owns only the public page, links and governance records. Production checks include DNS/TLS, exact allowed auth redirects/origins, existing gateway protection and matched public-suite descriptions. See issue #19 and the launch session handoff for rollout state.
