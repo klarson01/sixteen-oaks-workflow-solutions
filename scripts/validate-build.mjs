@@ -3,7 +3,7 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { join, extname, resolve } from "node:path";
 
 const output = resolve("dist");
-const routes = ["/", "/services/", "/work/", "/approach/", "/real-estate-intelligence/"];
+const routes = ["/", "/services/", "/work/", "/approach/", "/products/", "/real-estate-intelligence/"];
 const documents = new Map();
 const decode = (value) =>
   value.replaceAll("&amp;", "&").replaceAll("&quot;", '"');
