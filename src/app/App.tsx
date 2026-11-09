@@ -7,6 +7,7 @@ import Work from "./pages/Work";
 import Approach from "./pages/Approach";
 import RealEstate from "./pages/RealEstate";
 import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
 import ProjectPage from "./pages/ProjectPage";
 import type { Project } from "../content/model";
 import type { RoutePath, PagePath } from "./routes";
@@ -18,6 +19,9 @@ const pages = {
   "/approach/": Approach,
   "/products/": Products,
   "/real-estate-intelligence/": RealEstate,
+  "/products/ironwood/": () => <ProductDetail product="ironwood" />,
+  "/products/real-estate-intelligence/": () => <ProductDetail product="real-estate-intelligence" />,
+  "/products/aethralion/": () => <ProductDetail product="aethralion" />,
 };
 const noScriptStyles =
   ".menu-toggle{display:none}.desktop-nav{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.8125rem}.header-inner{height:auto;min-height:92px;flex-wrap:wrap;padding:18px 0;gap:10px}.desktop-nav{margin-left:0}.motion-toggle{display:none}";
