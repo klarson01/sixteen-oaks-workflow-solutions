@@ -1,0 +1,31 @@
+name: Products directory checks
+on:
+  push:
+    branches: [feature/products-directory-navigation]
+  pull_request:
+    paths:
+      - 'src/app/**'
+      - 'src/styles/site.css'
+      - 'scripts/validate-build.mjs'
+      - '.github/workflows/products-directory.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - name: Verify Products navigation and preserved Real Estate Intelligence route
+        run: |
+          test -s dist/products/index.html
+          test -s dist/real-estate-intelligence/index.html
+          grep -q 'Ironwood' dist/products/index.html
+          grep -q 'Canopy Forge' dist/products/index.html
+          grep -q 'Aethralion' dist/products/index.html
+          grep -q 'Real Estate Intelligence' dist/products/index.html
+          grep -q 'href="/products/"' dist/index.html
