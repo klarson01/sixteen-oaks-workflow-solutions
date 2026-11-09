@@ -11,6 +11,11 @@ export const routes = {
     description:
       "Custom websites, practical AI and automation, and business workflows for small businesses in southern Wisconsin and Northern Illinois.",
   },
+  "/products/": {
+    label: "Products",
+    title: "Products & Platforms | Sixteen Oaks Workflow Solutions",
+    description: "Explore Ironwood CRM, Canopy Forge marketing intelligence, Real Estate Intelligence and Aethralion—software products for businesses and specialized industries.",
+  },
   "/real-estate-intelligence/": {
     label: "Real Estate Intelligence",
     title: "Real Estate Intelligence | Sixteen Oaks Workflow Solutions",
