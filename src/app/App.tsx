@@ -6,6 +6,7 @@ import Services from "./pages/Services";
 import Work from "./pages/Work";
 import Approach from "./pages/Approach";
 import RealEstate from "./pages/RealEstate";
+import Products from "./pages/Products";
 import ProjectPage from "./pages/ProjectPage";
 import type { Project } from "../content/model";
 import type { RoutePath, PagePath } from "./routes";
@@ -15,6 +16,7 @@ const pages = {
   "/services/": Services,
   "/work/": Work,
   "/approach/": Approach,
+  "/products/": Products,
   "/real-estate-intelligence/": RealEstate,
 };
 const noScriptStyles =
