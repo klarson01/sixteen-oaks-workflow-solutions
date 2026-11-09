@@ -16,6 +16,21 @@ export const routes = {
     title: "Products and Platforms | Sixteen Oaks Workflow Solutions",
     description: "Explore Ironwood CRM, Canopy Forge marketing intelligence, Real Estate Intelligence and Aethralion—software products for businesses and specialized industries.",
   },
+  "/products/ironwood/": {
+    label: "Ironwood",
+    title: "Ironwood CRM | Sixteen Oaks Workflow Solutions",
+    description: "Explore Ironwood: configurable lead management, intake, assignment and follow-up for small businesses across industries.",
+  },
+  "/products/real-estate-intelligence/": {
+    label: "Real Estate Intelligence",
+    title: "Real Estate Intelligence Product | Sixteen Oaks Workflow Solutions",
+    description: "Explore property analyzers, AI-assisted review skills, saved reports, and the Real Estate Intelligence workspace.",
+  },
+  "/products/aethralion/": {
+    label: "Aethralion",
+    title: "Aethralion Platform | Sixteen Oaks Workflow Solutions",
+    description: "Learn about the Aethralion real estate operating platform: LeadOrbit, HelmOrbit, PropOrbit and BuildOrbit.",
+  },
   "/real-estate-intelligence/": {
     label: "Real Estate Intelligence",
     title: "Real Estate Intelligence | Sixteen Oaks Workflow Solutions",
