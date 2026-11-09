@@ -12,9 +12,10 @@ const products = [
     description:
       "Organize inquiries, assign leads, track conversations and follow-ups, and give your team a clear view of opportunities. More campaign automation is on the roadmap.",
     features: ["Lead intake and routing", "Contact and follow-up tracking", "Business-ready workflows"],
-    href: "https://ironwood.sixteenoaksllc.com/",
-    cta: "Open Ironwood",
-    external: true,
+    href: "/products/ironwood/",
+    cta: "Learn more",
+    external: false,
+    signIn: "https://ironwood.sixteenoaksllc.com/",
   },
   {
     name: "Canopy Forge",
@@ -29,6 +30,7 @@ const products = [
     href: "/#contact",
     cta: "Ask about Canopy Forge",
     external: false,
+    signIn: null,
   },
   {
     name: "Real Estate Intelligence",
@@ -40,9 +42,10 @@ const products = [
     description:
       "Property analyzers and AI-assisted review workflows to support buying, selling, investing and transaction decisions.",
     features: ["Property and financial analyzers", "Document review skills", "Private, branded workspace"],
-    href: "/real-estate-intelligence/",
-    cta: "Explore Real Estate Intelligence",
+    href: "/products/real-estate-intelligence/",
+    cta: "Learn more",
     external: false,
+    signIn: "https://intelligence.sixteenoaksllc.com/",
   },
   {
     name: "Aethralion",
@@ -54,9 +57,10 @@ const products = [
     description:
       "An integrated real estate operations platform for transaction coordination and specialized team workflows.",
     features: ["Transaction workflows", "Team operations", "Specialized real estate modules"],
-    href: "/#contact",
-    cta: "Ask about Aethralion",
+    href: "/products/aethralion/",
+    cta: "Learn more",
     external: false,
+    signIn: "https://aethralion.com/auth/login",
   },
 ] as const;
 
@@ -88,7 +92,7 @@ export default function Products() {
             <p>Some products are available today. Others are being developed and refined through real-world projects.</p>
           </div>
           <div className="products-grid">
-            {products.map(({ name, category, audience, status, statusType, Icon, description, features, href, cta, external }) => (
+            {products.map(({ name, category, audience, status, statusType, Icon, description, features, href, cta, external, signIn }) => (
               <article className="product-card" key={name}>
                 <div className="product-card-top">
                   <span className="product-card-icon" aria-hidden="true"><Icon size={29} strokeWidth={1.5} /></span>
@@ -99,9 +103,12 @@ export default function Products() {
                 <p className="product-audience">{audience}</p>
                 <p className="product-description">{description}</p>
                 <ul>{features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-                <a className="product-action" href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-                  {cta} <ArrowUpRight size={18} aria-hidden="true" />
-                </a>
+                <div className="product-card-actions">
+                  <a className="product-action" href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                    {cta} <ArrowUpRight size={18} aria-hidden="true" />
+                  </a>
+                  {signIn && <a className="product-signin" href={signIn}>Sign in <ArrowUpRight size={15} aria-hidden="true"/></a>}
+                </div>
               </article>
             ))}
           </div>
