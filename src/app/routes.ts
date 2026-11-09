@@ -13,7 +13,7 @@ export const routes = {
   },
   "/products/": {
     label: "Products",
-    title: "Products & Platforms | Sixteen Oaks Workflow Solutions",
+    title: "Products and Platforms | Sixteen Oaks Workflow Solutions",
     description: "Explore Ironwood CRM, Canopy Forge marketing intelligence, Real Estate Intelligence and Aethralion—software products for businesses and specialized industries.",
   },
   "/real-estate-intelligence/": {
