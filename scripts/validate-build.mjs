@@ -3,7 +3,7 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { join, extname, resolve } from "node:path";
 
 const output = resolve("dist");
-const routes = ["/", "/services/", "/work/", "/approach/", "/real-estate-intelligence/"];
+const routes = ["/", "/services/", "/work/", "/approach/", "/products/", "/real-estate-intelligence/"];
 const documents = new Map();
 const decode = (value) =>
   value.replaceAll("&amp;", "&").replaceAll("&quot;", '"');
@@ -158,7 +158,7 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
       1,
       route + ": active navigation",
     );
-    for (const expected of routes)
+    for (const expected of routes.filter((url) => url !== "/real-estate-intelligence/"))
       assert.ok(
         nav.includes('href="' + expected + '"'),
         route + ": all navigation links",

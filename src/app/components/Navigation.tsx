@@ -21,12 +21,12 @@ export default function Navigation({
       className={mobile ? "mobile-links" : "desktop-nav"}
       aria-label={mobile ? "Mobile navigation" : "Main navigation"}
     >
-      {routePaths.map((url) => (
+      {routePaths.filter((url) => url !== "/real-estate-intelligence/").map((url) => (
         <a
           key={url}
           className={mobile ? undefined : "nav-link"}
           href={url}
-          aria-current={path === url || (url === "/work/" && path.startsWith("/work/")) ? "page" : undefined}
+          aria-current={path === url || (url === "/work/" && path.startsWith("/work/")) || (url === "/products/" && path === "/real-estate-intelligence/") ? "page" : undefined}
         >
           {routes[url].label}
           {mobile ? <Arrow /> : null}

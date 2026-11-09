@@ -2583,3 +2583,51 @@ body:has(.mainstreet-home) .header-cta { background: var(--copper); border-color
 /* Real Estate Intelligence keeps its original Midnight Brass identity. */
 body:has(.intelligence-page){--ink:#070806;--ink-light:#10130f;--paper:#f0e9dc;--white:#f0e9dc;--copper:#b78a43;--copper-light:#dcb774;--copper-soft:#b78a43;--warm-rule:rgba(220,183,116,.22);--muted:#b0b4a7;--line:#30392f;background:var(--ink)}
 .intelligence-page .rei-tool figure{background:#10130f}.intelligence-page .rei-business img{border-color:#30392f}.intelligence-page .rei-feature-preview{background:#070806}
+
+
+/* Sixteen Oaks cross-industry product directory */
+.products-intro { padding-bottom: clamp(65px, 9vw, 110px); }
+.products-intro h1 { max-width: 920px; }
+.products-intro > .container > p:last-child { max-width: 760px; }
+.products-section { background: var(--paper); color: var(--ink); }
+.products-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 38px; }
+.products-section-heading h2 { font: 400 clamp(2.7rem, 5vw, 4.5rem)/1.04 var(--serif); margin: 12px 0 0; letter-spacing: -.025em; }
+.products-section-heading > p { max-width: 360px; margin: 0 0 5px; color: #405459; }
+.products-section-heading .eyebrow { color: #97602f; }
+.products-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.product-card { display: flex; flex-direction: column; min-width: 0; padding: clamp(25px, 3.5vw, 43px); background: #fffefa; border: 1px solid #d5d5cb; border-radius: 7px; box-shadow: 0 14px 32px rgba(6,30,36,.06); }
+.product-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 28px; }
+.product-card-icon { display: grid; place-items: center; width: 64px; height: 64px; color: #da955a; background: var(--ink); border-radius: 7px; }
+.product-status { border: 1px solid #b6c9bb; color: #27563e; padding: 4px 11px; border-radius: 999px; text-transform: uppercase; letter-spacing: .09em; font-size: .67rem; font-weight: 700; white-space: nowrap; }
+.product-status--development { color: #71532c; border-color: #d6bd90; background: #fbf4e7; }
+.product-category { color: #9b632f; text-transform: uppercase; letter-spacing: .12em; font-size: .74rem; font-weight: 700; margin: 0 0 8px; }
+.product-card h3 { font: 400 clamp(2.2rem, 3vw, 3.35rem)/1.1 var(--serif); letter-spacing: -.02em; margin: 0 0 7px; color: var(--ink); }
+.product-audience { color: #6c7776; font-size: .85rem; margin: 0 0 17px; }
+.product-description { color: #304c50; line-height: 1.65; margin: 0 0 20px; }
+.product-card ul { list-style: none; padding: 0; margin: 0 0 25px; color: #35575a; font-size: .9rem; }
+.product-card li { position: relative; padding: 5px 0 5px 20px; }
+.product-card li::before { content: ""; position: absolute; left: 0; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: var(--copper); }
+.product-action { margin-top: auto; display: inline-flex; align-items: center; justify-content: space-between; gap: 12px; align-self: flex-start; color: #194248; font-weight: 700; border-bottom: 1px solid var(--copper); padding: 8px 0; text-decoration: none; }
+.product-action:hover { color: #ac602b; }
+.product-action:focus-visible { outline: 3px solid var(--copper); outline-offset: 5px; }
+.products-service-note { background: #0b2930; color: var(--white); }
+.products-service-inner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 26px; }
+.products-service-inner > svg { color: var(--copper-light); }
+.products-service-inner h2 { font: 400 clamp(2rem, 3.5vw, 3.3rem)/1.15 var(--serif); margin: 10px 0; }
+.products-service-inner p:not(.eyebrow) { max-width: 700px; color: var(--muted); margin-bottom: 0; }
+.products-service-inner .button { white-space: nowrap; }
+@media (max-width: 850px) {
+  .products-section-heading { display: block; }
+  .products-section-heading > p { margin-top: 18px; max-width: 680px; }
+  .products-service-inner { grid-template-columns: auto minmax(0, 1fr); }
+  .products-service-inner .button { grid-column: 2; justify-self: start; }
+}
+@media (max-width: 650px) {
+  .products-grid { grid-template-columns: minmax(0, 1fr); gap: 17px; }
+  .products-section-heading { margin-bottom: 27px; }
+  .product-card { padding: 26px 22px; }
+  .product-card-top { margin-bottom: 22px; }
+  .product-card-icon { width: 54px; height: 54px; }
+  .products-service-inner { display: flex; align-items: flex-start; flex-direction: column; gap: 16px; }
+  .products-service-inner .button { white-space: normal; }
+}
