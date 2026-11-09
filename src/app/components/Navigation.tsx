@@ -21,7 +21,7 @@ export default function Navigation({
       className={mobile ? "mobile-links" : "desktop-nav"}
       aria-label={mobile ? "Mobile navigation" : "Main navigation"}
     >
-      {routePaths.filter((url) => url !== "/real-estate-intelligence/" && !url.startsWith("/products/")).map((url) => (
+      {routePaths.filter((url) => url !== "/real-estate-intelligence/" && (url === "/products/" || !url.startsWith("/products/"))).map((url) => (
         <a
           key={url}
           className={mobile ? undefined : "nav-link"}
