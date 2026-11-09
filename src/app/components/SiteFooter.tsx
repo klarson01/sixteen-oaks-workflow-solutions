@@ -11,8 +11,8 @@ export default function SiteFooter() {
         <nav className="footer-navigation" aria-label="Footer navigation">
           <a href="/">Home</a>
           <a href="/services/">Services</a>
+          <a href="/products/">Products</a>
           <a href="/work/">Our work</a>
-          <a href="/real-estate-intelligence/">Real Estate Intelligence</a>
           <a href="/approach/">About</a>
           <a href="/admin/">Website admin</a>
         </nav>
