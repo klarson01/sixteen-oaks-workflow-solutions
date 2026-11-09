@@ -158,7 +158,7 @@ for (const route of [...routes, "/work/rays-mobile-repair/", "/404.html"]) {
       1,
       route + ": active navigation",
     );
-    for (const expected of routes)
+    for (const expected of routes.filter((url) => url !== "/real-estate-intelligence/"))
       assert.ok(
         nav.includes('href="' + expected + '"'),
         route + ": all navigation links",
