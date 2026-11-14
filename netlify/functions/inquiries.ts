@@ -67,7 +67,7 @@ export default async function (request: Request, context: Context) {
       const challenge = text(fields.get("assessmentChallenge"), "Biggest challenge", 2000, true);
       if (challenge.length < 10) throw new ValidationError("Please describe your business challenge in a little more detail.");
       const answers = assessmentQuestions.map(([field, title, options]) => title + ": " + choice(field, title, options));
-      assessmentMessage = ["BUSINESS TECHNOLOGY ASSESSMENT", "Industry: " + industry, "Business size: " + size, "Timing: " + timing, "", ...answers, "", "Biggest challenge:", challenge, "", "Consent: Contact about this assessment only"].join("\\n");
+      assessmentMessage = ["BUSINESS TECHNOLOGY ASSESSMENT", "Industry: " + industry, "Business size: " + size, "Timing: " + timing, "", ...answers, "", "Biggest challenge:", challenge, "", "Consent: Contact about this assessment only"].join("\n");
       if (!String(fields.get("business") ?? "").trim()) throw new ValidationError("Please enter your business name.");
     }
     const inquiry: Inquiry = {
