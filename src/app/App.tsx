@@ -2,6 +2,7 @@ import SiteHeader from "./components/SiteHeader";
 import SiteFooter from "./components/SiteFooter";
 import MobileMenu from "./components/MobileMenu";
 import Home from "./pages/Home";
+import BusinessAssessment from "./pages/BusinessAssessment";
 import Services from "./pages/Services";
 import Work from "./pages/Work";
 import Approach from "./pages/Approach";
@@ -14,6 +15,7 @@ import type { RoutePath, PagePath } from "./routes";
 
 const pages = {
   "/": Home,
+  "/business-assessment/": BusinessAssessment,
   "/services/": Services,
   "/work/": Work,
   "/approach/": Approach,
