@@ -90,6 +90,7 @@ export default function Home() {
           <div className="landscape-action"><a className="button" href="#contact">{home.closingButton} <Arrow /></a><p>{home.closingNote}</p></div>
         </div>
       </section>
+      <section className="section" aria-labelledby="assessment-cta-title"><div className="container" style={{maxWidth: "850px", textAlign: "center"}}><p className="eyebrow" style={{justifyContent:"center"}}>Free business assessment</p><h2 id="assessment-cta-title" style={{fontSize:"clamp(2.3rem, 5vw, 4rem)",margin:"22px 0"}}>Could your business run <em style={{color:"var(--copper-light)"}}>a little easier?</em></h2><p style={{color:"var(--muted)",marginBottom:28}}>Take our free 3–5 minute Business Technology Assessment. We’ll review your answers and suggest practical improvements for your website, workflows, and automation.</p><a className="button" href="/business-assessment/">Start my free assessment <Arrow /></a></div></section>
       <OpportunityFinder />
       <Contact />
     </div>
