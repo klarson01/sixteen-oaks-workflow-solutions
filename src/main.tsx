@@ -1,4 +1,5 @@
 import "./styles/site.css";
+import "./styles/assessment.css";
 import initializeOpportunity from "./app/lib/opportunity";
 import initializeMotion from "./app/lib/motion";
 import initializeAnalytics from "./app/lib/analytics";
