@@ -51,6 +51,8 @@ export default async function (request: Request, context: Context) {
 export const config: Config = {
   path: [
     "/",
+    "/business-assessment",
+    "/business-assessment/",
     "/services",
     "/services/",
     "/work",
