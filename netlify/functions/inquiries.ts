@@ -39,6 +39,37 @@ export default async function (request: Request, context: Context) {
         "Please refresh the page, then send your message again.",
         400,
       );
+    const isAssessment = fields.get("service") === "Business Technology Assessment";
+    const assessmentQuestions = [
+      ["assessmentWebsite", "Website & online presence", ["Yes, it works well", "Somewhat, it needs improvement", "No, or we don't have a website"]],
+      ["assessmentLeads", "Customer management", ["Yes, in a dedicated system", "Partially, across multiple tools", "No, mostly manually"]],
+      ["assessmentScheduling", "Appointments & requests", ["Yes, with a smooth process", "Only by email or basic form", "No, mostly by phone"]],
+      ["assessmentWorkflow", "Daily workflows", ["Most recurring work", "Some recurring work", "Very little or none"]],
+      ["assessmentReporting", "Business visibility", ["Yes, in dashboards or reports", "Somewhat, with manual effort", "No, information is scattered"]],
+      ["assessmentSystems", "Connected systems", ["Yes, well integrated", "A few systems connect", "No, mostly disconnected"]],
+      ["assessmentMarketing", "Marketing & follow-up", ["Yes, with planned campaigns", "Sometimes, when time allows", "No consistent process"]],
+      ["assessmentAI", "Practical AI", ["Yes, routinely", "Experimenting or exploring", "No, not yet"]],
+    ] as const;
+    let assessmentMessage = "";
+    if (isAssessment) {
+      if (fields.get("assessmentConsent") !== "yes") throw new ValidationError("Please confirm that we may contact you about your assessment.");
+      const allowedIndustries = ["Construction & trades","Automotive & repair","Retail & hospitality","Professional services","Healthcare & wellness","Real estate","Manufacturing & logistics","Other"];
+      const allowedSizes = ["Just me","2–10","11–50","51–200","200+"];
+      const allowedTiming = ["Just exploring","Within the next month","Within 1–3 months","Later this year"];
+      const choice = (field: string, label: string, allowed: readonly string[]) => {
+        const value = text(fields.get(field), label, 160, true);
+        if (!allowed.includes(value)) throw new ValidationError("Please complete all assessment questions.");
+        return value;
+      };
+      const industry = choice("assessmentIndustry", "Industry", allowedIndustries);
+      const size = choice("assessmentSize", "Business size", allowedSizes);
+      const timing = choice("assessmentTiming", "Timing", allowedTiming);
+      const challenge = text(fields.get("assessmentChallenge"), "Biggest challenge", 2000, true);
+      if (challenge.length < 10) throw new ValidationError("Please describe your business challenge in a little more detail.");
+      const answers = assessmentQuestions.map(([field, title, options]) => title + ": " + choice(field, title, options));
+      assessmentMessage = ["BUSINESS TECHNOLOGY ASSESSMENT", "Industry: " + industry, "Business size: " + size, "Timing: " + timing, "", ...answers, "", "Biggest challenge:", challenge, "", "Consent: Contact about this assessment only"].join("\n");
+      if (!String(fields.get("business") ?? "").trim()) throw new ValidationError("Please enter your business name.");
+    }
     const inquiry: Inquiry = {
       id,
       createdAt: new Date().toISOString(),
@@ -47,7 +78,7 @@ export default async function (request: Request, context: Context) {
       phone: text(fields.get("phone") ?? "", "Phone", 40),
       business: text(fields.get("business") ?? "", "Business", 160),
       service: text(fields.get("service") ?? "", "Service", 80),
-      message: text(fields.get("message"), "Message", 5000, true),
+      message: isAssessment ? assessmentMessage : text(fields.get("message"), "Message", 5000, true),
       page: new URL(
         request.headers.get("referer") ?? context.site.url ?? request.url,
       ).pathname.slice(0, 200),

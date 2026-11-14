@@ -5,6 +5,7 @@ export const routes = {
     description:
       "Practical AI, custom websites, and connected workflows for small businesses. Based in Monroe, Wisconsin, and built around you.",
   },
+  "/business-assessment/": { label: "Free Assessment", title: "Free Business Technology Assessment | Sixteen Oaks Workflow Solutions", description: "A free, no-obligation technology and automation assessment for small businesses. Discover practical opportunities to reduce busywork." },
   "/services/": {
     label: "Services",
     title: "Our Services | Sixteen Oaks Workflow Solutions",
