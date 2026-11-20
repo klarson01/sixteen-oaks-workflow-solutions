@@ -40,3 +40,7 @@ Sixteen Oaks is the parent cross-industry business; Aethralion is specialized fo
 - Treat GitHub as the source of truth. Do not copy the ChatGPT Sites project identity or credentials into this repository.
 - Do not add secrets or customer operational data to committed files.
 - Keep documentation aligned with changes to routes, build steps, deployment, or product behavior.
+
+## Automation architecture, IP and Canopy Forge
+
+Before implementing automation workflows, social publishing, AI marketing, or third-party integrations, read [Automation Architecture & IP Standard](docs/standards/AUTOMATION_ARCHITECTURE_IP_STANDARD.md), the [automation engine ADR](docs/architecture/ADR-automation-engine.md), and the [social provider ADR](docs/architecture/ADR-social-provider-adapters.md). Update the [source provenance](docs/compliance/SOURCE_PROVENANCE_REGISTER.md) and [license register](docs/compliance/THIRD_PARTY_LICENSE_REGISTER.md) as needed. Run the [tenant isolation acceptance tests](docs/testing/TENANT_ISOLATION_ACCEPTANCE.md) before production changes. No unlicensed external workflow JSON/code, no mandatory Blotato dependency, and no n8n commercial embedding without licensing review. Canopy Forge app runtime belongs in its own repository, not this corporate website.
