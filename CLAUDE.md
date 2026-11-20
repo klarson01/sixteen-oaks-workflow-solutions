@@ -12,3 +12,7 @@ This repository is the **Sixteen Oaks corporate website**, not the runtime or so
 Preserve all existing AGENTS.md rules. Do not import other product databases, secrets, or code into this website. Use feature branches and PRs; do not deploy/merge without authorization.
 
 At the beginning of a task, inspect applicable current GitHub issue/PR and the last session handoff. At the end of substantive work, leave an actionable handoff with current state, environment, files, tests, risks, and next steps. Never claim a change was deployed unless verified.
+
+6. [Automation Architecture & IP Standard](docs/standards/AUTOMATION_ARCHITECTURE_IP_STANDARD.md): independent implementation, social provider adapters, licensing, client isolation and approval gates.
+
+For automation-related work, also consult the Phase 1 specification and ADRs under docs/architecture, plus the provenance/license registers and tenant isolation criteria. Never copy unlicensed example code or deploy Canopy Forge runtime into this corporate website.
