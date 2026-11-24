@@ -6,6 +6,7 @@ import BusinessAssessment from "./pages/BusinessAssessment";
 import Services from "./pages/Services";
 import Work from "./pages/Work";
 import Approach from "./pages/Approach";
+import BusinessAcquisition from "./pages/BusinessAcquisition";
 import RealEstate from "./pages/RealEstate";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -21,6 +22,7 @@ const pages = {
   "/approach/": Approach,
   "/products/": Products,
   "/real-estate-intelligence/": RealEstate,
+  "/business-acquisition-intelligence/": BusinessAcquisition,
   "/products/ironwood/": () => <ProductDetail product="ironwood" />,
   "/products/real-estate-intelligence/": () => <ProductDetail product="real-estate-intelligence" />,
   "/products/aethralion/": () => <ProductDetail product="aethralion" />,

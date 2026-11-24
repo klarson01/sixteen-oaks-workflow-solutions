@@ -1,5 +1,5 @@
 import { useSite } from "../../content/context";
-export default function Contact({ earlyAccess = false }: { earlyAccess?: boolean }) {
+export default function Contact({ earlyAccess = false, acquisition = false }: { earlyAccess?: boolean; acquisition?: boolean }) {
   const {
     content: { settings },
     formToken,
@@ -89,12 +89,13 @@ export default function Contact({ earlyAccess = false }: { earlyAccess?: boolean
           </div>
           <label htmlFor="contact-service">
             What can we help with?
-            <select id="contact-service" name="service" defaultValue={earlyAccess ? "Real Estate Intelligence / early access" : "Let’s explore"}>
+            <select id="contact-service" name="service" defaultValue={acquisition ? "Business Acquisition Intelligence" : earlyAccess ? "Real Estate Intelligence / early access" : "Let’s explore"}>
               <option>Let’s explore</option>
               <option>Website</option>
               <option>AI &amp; automation</option>
               <option>Custom application</option>
               <option>Real Estate Intelligence / early access</option>
+              <option>Business Acquisition Intelligence</option>
             </select>
           </label>
           <label htmlFor="contact-message">

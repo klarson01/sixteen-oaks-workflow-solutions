@@ -34,7 +34,7 @@ const products: Record<ProductKey, Product> = {
     primaryHref: "https://intelligence.sixteenoaksllc.com/?intent=trial", primaryLabel: "Start free trial",
     overview: "Work through buyer costs, seller proceeds, rental and investment assumptions, then review supporting documents using guided AI-assisted workflows. Save private analyses and prepare branded outputs. Results remain planning support, not appraisals, guarantees or professional advice.",
     features: [
-      { title: "Financial analyzers", description: "Buyer, seller, rental, multifamily, commercial and acquisition analysis.", icon: icon(ChartNoAxesCombined) },
+      { title: "Financial analyzers", description: "Five property analyzers: buyer, seller, rental, multifamily and commercial.", icon: icon(ChartNoAxesCombined) },
       { title: "AI review skills", description: "Guided workflows for inspection, appraisal, offer and related document review.", icon: icon(FileCheck2) },
       { title: "Reports worth sharing", description: "Saved workspaces and agency-branded reports for more useful discussions.", icon: icon(LayoutDashboard) },
       { title: "Accessible on its own", description: "Use the intelligence workspace without purchasing another Sixteen Oaks product.", icon: icon(Check) },

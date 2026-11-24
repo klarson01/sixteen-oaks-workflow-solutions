@@ -81,3 +81,9 @@ Nine active `sixteen-oaks-*` Edge Functions were discovered in Aethralion DEV: g
 ## 2026-11-06 Real Estate Intelligence launch clarification
 
 Kevin selected `intelligence.sixteenoaksllc.com` for the existing standalone workspace. This is a branded hostname and marketing-link integration, not a code or database merger. The workspace retains its canonical Sites Git repository, existing Netlify site and existing Aethralion DEV project `cdomxmdflahwhmcmruvo`; its backend is not being relabeled or migrated to Aethralion PROD. Existing identities, private records, trial/access metadata and immutable usage ledger are preserved. Owner-adjustable AI ceilings are independent of dated access. The corporate repository owns only the public page, links and governance records. Production checks include DNS/TLS, exact allowed auth redirects/origins, existing gateway protection and matched public-suite descriptions. See issue #19 and the launch session handoff for rollout state.
+
+## 2026-11-24 Business Acquisition Intelligence positioning
+
+Kevin authorized a separate Sixteen Oaks Business Acquisition Intelligence product identity. Corporate marketing owns `/business-acquisition-intelligence/`, its product catalog card and the Real Estate Intelligence cross-link. Real Estate Intelligence now describes five property analyzers and seven AI workflows. Phase one reuses the existing Intelligence workspace, `acquisition_analyzer` record type, account, branding and current access controls. No identity/data migration, DNS change or separate paid entitlement is introduced.
+
+Live workspace release verified as `owner-direct-account-creation-v1` (2026-11-17), deploy `6afcc8e346f0c03492fe55f0`. Its admin updates are newer than canonical source commit `c7416d3`; preserve those live admin files during any presentation-only release. See the 2026-11-24 handoff.

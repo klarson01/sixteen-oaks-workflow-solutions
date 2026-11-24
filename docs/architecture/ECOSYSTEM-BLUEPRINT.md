@@ -8,7 +8,8 @@ Status: Proposed governing architecture | Version: 1.0 draft | Date: 2026-11-05
 | Product | Owner of business workflow | Boundary |
 |---|---|---|
 | Aethralion | Real estate operations platform | LeadOrbit (real estate leads), HelmOrbit (transactions/compliance/commissions), PropOrbit (property operations), BuildOrbit (builder projects). Sentinel is the authorized platform assistant. |
-| Real Estate Intelligence | Standalone six-analyzer and AI-skills product; also accessible through Aethralion | Its own users, trial, subscription, usage and saved analyses. Share calculation contracts; do not blend tenant data. |
+| Real Estate Intelligence | Standalone five-property-analyzer and seven-AI-workflow product; also accessible through Aethralion | Its own users, trial, subscription, usage and saved analyses. Share calculation contracts; do not blend tenant data. |
+| Business Acquisition Intelligence | Standalone business purchase screening product under Sixteen Oaks | Dedicated marketing and workspace entry; phase one retains existing Intelligence identity, private records, reporting and pilot access. Separate billing remains future work. |
 | Ironwood | Cross-industry CRM, intake, routing, follow-up, deal pipeline and optional Archive | Independent from LeadOrbit. Generic routing/connectors may be reused by versioned integration contracts. |
 | Canopy Forge | Planned cross-industry marketing, content, SEO/GEO and campaigns | Proposed marketing director Heidi. Integration with Ironwood through APIs, not shared CRM tables. |
 | Custom client solutions | Individual business websites, integrations and automation | Preserve each client's repo, deployment, domain, forms/config and credential boundaries. |
